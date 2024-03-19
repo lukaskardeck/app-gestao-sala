@@ -1,0 +1,17 @@
+import React from 'react';
+import {
+  //StyleSheet,
+} from 'react-native';
+import { Router } from './src/routes/router';
+import AuthProvider from './src/contexts/Auth';
+
+function App() {
+
+  return (
+    <AuthProvider>
+      <Router/>
+    </AuthProvider>
+  );
+}
+
+export default App;
