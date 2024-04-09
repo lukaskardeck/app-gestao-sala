@@ -15,11 +15,11 @@ export default function Adicionar() {
       <ImageBackground
         source={require('../assets/Fundo1.png')}
         style={styles.imageBackground}>
-        <Text style={styles.title}>Adicionar</Text>
+        <Text style={styles.title}>Consultar</Text>
         <View style={styles.formContext}>
           <TouchableOpacity
             style={styles.buttonCadastrar}
-            onPress={() => navigation.navigate('CadastrarProfessor')}>
+            onPress={() => navigation.navigate('ConsultarProfessor')}>
             <Text style={styles.buttonText}>Professor</Text>
           </TouchableOpacity>
 

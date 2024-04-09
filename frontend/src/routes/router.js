@@ -3,7 +3,7 @@ import React, {useContext} from 'react';
 //import {AppStack} from './AppStack';
 import {AuthStack} from './AuthStack';
 import {AuthContext} from '../contexts/Auth';
-import DrawerRoutes from './drawer.routes';
+import DrawerRoutes from './drawerRoutes';
 
 //{user ? <AppStack /> : <AuthStack />}
 //{user ? <DrawerRoutes /> : <AuthStack />}

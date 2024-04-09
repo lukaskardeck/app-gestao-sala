@@ -1,15 +1,24 @@
+/* eslint-disable react/react-in-jsx-scope */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 //import {AntDesign} from '@expo/vector-icons';
 //import {Entypo} from '@expo/vector-icons';
 //import {FontAwesome5} from '@expo/vector-icons';
 //import {FontAwesome6} from '@expo/vector-icons';
 
+
+/**
+ * ARQUIVO OBSOLETO !
+ * ARQUIVO OBSOLETO !
+ * ARQUIVO OBSOLETO !
+ * ARQUIVO OBSOLETO !
+ */
+
 import Espaco from '../screens/Espaco';
 import Manutencao from '../screens/Manutencao';
 import Gestor from '../screens/Gestor';
 import Consultar from '../screens/Consultar';
-import {AppStack} from './AppStack';
-import AddStack from './AddStack';
+//import {AppStack} from './AppStack';
+import AddStack from './AppStack';
 
 const Tab = createBottomTabNavigator();
 

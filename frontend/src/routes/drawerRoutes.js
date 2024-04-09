@@ -4,9 +4,11 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 //import {Feather} from '@expo/vector-icons';
 //import {AntDesign} from '@expo/vector-icons';
 
-import TabRoutes from './tab.routes';
+import TabRoutes from './tabRoutes';
+import HomeTab from './HomeTab';
 import Perfil from '../screens/Perfil';
 import Configuracoes from '../screens/Configuracoes';
+import AppStack from './AppStack';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,7 +22,7 @@ export default function DrawerRoutes() {
       }}>
       <Drawer.Screen
         name="Home"
-        component={TabRoutes}
+        component={AppStack}
         options={{
           /*drawerIcon: ({color, size}) => (
             <Feather name="home" size={size} color={color} />

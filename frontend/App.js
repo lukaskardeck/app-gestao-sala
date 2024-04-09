@@ -3,7 +3,7 @@ import React from 'react';
 import {
   //StyleSheet,
 } from 'react-native';
-import { Router } from './src/routes/router';
+import { Router } from './src/routes/Router';
 import AuthProvider from './src/contexts/Auth';
 
 function App() {

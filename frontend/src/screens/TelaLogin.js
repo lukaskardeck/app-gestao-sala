@@ -39,6 +39,7 @@ function TelaLogin() {
         <TouchableOpacity onPress={async () => {
           const user = await onGoogleButtonPress();
           await SignIn(user);
+          //await SignIn('@uesb.edu.br');
         }}>
           <Image
             source={require('../assets/img-login-google.png')}

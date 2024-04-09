@@ -10,7 +10,6 @@ class UserController {
     }
 
     try {
-      console.log("Aqui vai?");
       await User.add(email, nome);
     } catch (error) {
       res.status(500).send({ error });
