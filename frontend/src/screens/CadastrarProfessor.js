@@ -14,7 +14,7 @@ import {SelectList} from 'react-native-dropdown-select-list';
 
 export default function CadastrarProfessor() {
   const [errorMessage, setErrorMessage] = useState(null);
-  //const [nome, setNome] = useState('');
+  const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [setores, setSetores] = useState([]);
@@ -47,24 +47,31 @@ export default function CadastrarProfessor() {
     getSetores();
   }, []);
 
-
-  async function addUsuarioComoProfessor(idSetor, email, telefone) {
+  async function addUsuarioComoProfessor(idSetor, email, nome, telefone) {
     try {
-
       if (!idSetor) {
         Alert.alert('Selecione o setor');
         return;
       }
+      idSetor = idSetor.trim();
 
       if (!email) {
         Alert.alert('Insira o email');
         return;
       }
+      email = email.trim();
+
+      if (!nome) {
+        Alert.alert('Insira o nome');
+        return;
+      }
+      nome = nome.trim();
 
       if (!telefone) {
         Alert.alert('Insira o telefone');
         return;
       }
+      telefone = telefone.trim();
 
       // Verificar se o usuário já existe com o email fornecido
       const snapshot = await firestore()
@@ -72,21 +79,29 @@ export default function CadastrarProfessor() {
         .where('email', '==', email)
         .get();
 
+      let userId;
+
       if (snapshot.empty) {
         // Se o usuário não existir não existir na coleção (banco)
-        console.log('Este email não cadastrado no sistema!');
-        Alert.alert('Este email não cadastrado no sistema!');
-        return;
+        const docRef = await firestore().collection('Usuario').add({
+          email: email,
+          nome: nome,
+          telefone: telefone,
+          setor: idSetor,
+        });
+
+        userId = docRef.id;
+      } else {
+        // Obter o ID do usuário encontrado
+        userId = snapshot.docs[0].id;
+
+        // Atualizar/criar os campos telefone e sigla do usuário
+        await firestore().collection('Usuario').doc(userId).update({
+          nome: nome,
+          telefone: telefone,
+          setor: idSetor,
+        });
       }
-
-      // Obter o ID do usuário encontrado
-      const userId = snapshot.docs[0].id;
-
-      // Atualizar/criar os campos telefone e sigla do usuário
-      await firestore().collection('Usuario').doc(userId).update({
-        telefone: telefone,
-        setor: idSetor,
-      });
 
       // Adicionar um novo documento na coleção Usuario_Papel
       await firestore().collection('Usuario_Papel').add({
@@ -95,6 +110,7 @@ export default function CadastrarProfessor() {
       });
 
       setEmail('');
+      setNome('');
       setTelefone('');
       setSelectedSetor('');
 
@@ -124,8 +140,8 @@ export default function CadastrarProfessor() {
         source={require('../assets/Fundo.png')}
         style={styles.imageBackground}>
         <View>
-          <Text style={styles.textTitle1}>Cadastrar</Text>
-          <Text style={styles.textTitle2}>Professor</Text>
+          <Text style={styles.textTitle1}>Cadastrar Professor</Text>
+          {/*<Text style={styles.textTitle2}>Professor</Text>*/}
         </View>
 
         <View style={styles.formContext}>
@@ -147,7 +163,13 @@ export default function CadastrarProfessor() {
                 data={setores}
                 setSelected={setSelectedSetor}
                 placeholder="Selecione o setor"
-                dropdownStyles={{zIndex: 2, position: 'absolute', top: 50 ,backgroundColor: 'white', width: '100%'}}
+                dropdownStyles={{
+                  zIndex: 2,
+                  position: 'absolute',
+                  top: 50,
+                  backgroundColor: 'white',
+                  width: '100%',
+                }}
                 maxHeight={150}
               />
             </View>
@@ -166,6 +188,18 @@ export default function CadastrarProfessor() {
           />
 
           <View style={styles.box}>
+            <Text style={styles.textForm}>Nome:</Text>
+            <Text style={styles.errorMessage}>{errorMessage}</Text>
+          </View>
+          <TextInput
+            placeholder="Ex.: João"
+            keyboardType="ascii-capable"
+            style={styles.input}
+            onChangeText={setNome}
+            value={nome}
+          />
+
+          <View style={styles.box}>
             <Text style={styles.textForm}>Telefone:</Text>
             <Text style={styles.errorMessage}>{errorMessage}</Text>
           </View>
@@ -178,9 +212,16 @@ export default function CadastrarProfessor() {
           />
 
           <TouchableOpacity style={styles.buttonCadastrar}>
-            <Text 
-              style={styles.buttonText} 
-              onPress={async () => await addUsuarioComoProfessor(selectedSetor, email, telefone)}>
+            <Text
+              style={styles.buttonText}
+              onPress={async () =>
+                await addUsuarioComoProfessor(
+                  selectedSetor,
+                  email,
+                  nome,
+                  telefone,
+                )
+              }>
               Cadastrar
             </Text>
           </TouchableOpacity>
@@ -205,6 +246,7 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 30,
     textAlign: 'center',
+    marginBottom: 20,
   },
 
   textTitle2: {
@@ -230,7 +272,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingTop: 20,
     width: '85%',
-    height: '70%',
     borderRadius: 30,
   },
 

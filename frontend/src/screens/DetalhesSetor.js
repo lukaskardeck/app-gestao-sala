@@ -7,35 +7,35 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-export default function DetalhesProfessor({route}) {
-  const professor = route.params.item;
+export default function DetalhesSetor({route}) {
+  const setor = route.params.item;
 
   return (
     <View style={styles.container}>
       <ImageBackground
         source={require('../assets/Fundo1.png')}
         style={styles.imageBackground}>
-        <Text style={styles.title}>{professor.nome}</Text>
+        <Text style={styles.title}>{setor.sigla}</Text>
         <View style={styles.formContext}>
           <View style={styles.detalhesProfessor}>
             <View>
-              <Text style={styles.titleInput}>Email: </Text>
+              <Text style={styles.titleInput}>Nome: </Text>
               <View style={styles.item}>
-                <Text style={styles.text}>{professor.email}</Text>
+                <Text style={styles.text}>{setor.nome}</Text>
               </View>
             </View>
 
             <View>
-              <Text style={styles.titleInput}>Setor: </Text>
+              <Text style={styles.titleInput}>Email: </Text>
               <View style={styles.item}>
-                <Text style={styles.text}>{professor.nomeSetor}</Text>
+                <Text style={styles.text}>{setor.email}</Text>
               </View>
             </View>
 
             <View>
               <Text style={styles.titleInput}>Telefone: </Text>
               <View style={styles.item}>
-                <Text style={styles.text}>{professor.telefone}</Text>
+                <Text style={styles.text}>{setor.telefone}</Text>
               </View>
             </View>
           </View>

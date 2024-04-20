@@ -11,49 +11,49 @@ import {useNavigation} from '@react-navigation/native';
 import {useState, useEffect} from 'react';
 import firestore from '@react-native-firebase/firestore';
 
-export default function ConsultarProfessor() {
+export default function ConsultarSetor() {
   const navigation = useNavigation();
 
   const navigateToDetails = item => {
-    navigation.navigate('DetalhesProfessor', {item});
+    navigation.navigate('DetalhesSetor', {item});
   };
 
-  const [professores, setProfessores] = useState([]);
   /*const [professores, setProfessores] = useState([
     {
       id: 1,
-      nome: 'Agnaldo',
-      email: 'agnaldo@uesb.edu.br',
+      nome: 'Departamento de Ciencias e Tecnologia',
+      email: 'dct@uesb.edu.br',
       telefone: '123456789',
-      setor: 'DCT',
+      sigla: 'DCT',
     },
     {
       id: 2,
-      nome: 'Saulo',
-      email: 'saulo@uesb.edu.br',
-      telefone: '123456789',
-      setor: 'DCT',
+      nome: 'Departamento de Ciencias Humanas e Linguagens',
+      email: 'dchl@uesb.edu.br',
+      telefone: '80818283',
+      sigla: 'DCHL',
     },
     {
       id: 3,
-      nome: 'Robson',
-      email: 'robson@uesb.edu.br',
+      nome: 'Departamento de Saúde',
+      email: 'dcs@uesb.edu.br',
       telefone: '123456789',
-      setor: 'DCT',
+      sigla: 'DS',
     },
     {
       id: 4,
-      nome: 'Lara',
-      email: 'lara@uesb.edu.br',
+      nome: 'Departamento de Ciências Biológicas',
+      email: 'dcb@uesb.edu.br',
       telefone: '123456789',
-      setor: 'DCHL',
+      sigla: 'DCB',
     },
   ]);*/
+  const [setores, setSetores] = useState([]);
 
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => navigateToDetails(item.value)}>
       <View style={styles.item}>
-        <Text style={styles.text}>{item.value.nome}</Text>
+        <Text style={styles.text}>{item.value.sigla}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -72,53 +72,31 @@ export default function ConsultarProfessor() {
    */
 
   useEffect(() => {
-    const getProfessores = async () => {
+    const getSetores = async () => {
       const snapshot = await firestore()
         .collection('Usuario_Papel')
-        .where('id_papel', '==', 1)
+        .where('id_papel', '==', 2)
         .get();
 
       const idUsers = snapshot.docs.map(doc => doc.data().id_usuario);
 
-      const professoresQuery = [];
+      //console.log('IDs: ', idUsers);
 
-      for (const idUser of idUsers) {
-        const userSnapshot = await firestore()
-          .collection('Usuario')
-          .doc(idUser)
-          .get();
+      const snapshot2 = await firestore()
+        .collection('Usuario')
+        .where(firestore.FieldPath.documentId(), 'in', idUsers)
+        .get();
 
-        const userData = userSnapshot.data();
+      const setoresQuery = snapshot2.docs.map(doc => ({
+        key: doc.id,
+        value: doc.data(),
+      }));
 
-        // Se userData contém o campo setor
-        if (userData.setor) {
-          const setorSnapshot = await firestore()
-            .collection('Usuario')
-            .doc(userData.setor)
-            .get();
-
-          const setorData = setorSnapshot.data();
-
-          // Se o setor existe, adiciona o nome do setor aos dados do usuário
-          if (setorData) {
-            userData.nomeSetor = setorData.nome;
-          }
-        }
-
-        // Remove o campo de ID do setor dos dados do usuário
-        delete userData.setor;
-
-        professoresQuery.push({
-          key: userSnapshot.id,
-          value: userData,
-        });
-      }
-
-      setProfessores(professoresQuery);
-      console.log(professoresQuery);
+      setSetores(setoresQuery);
+      //console.log(setoresQuery);
     };
 
-    getProfessores();
+    getSetores();
   }, []);
 
   return (
@@ -126,14 +104,14 @@ export default function ConsultarProfessor() {
       <ImageBackground
         source={require('../assets/Fundo1.png')}
         style={styles.imageBackground}>
-        <Text style={styles.title}>Professores</Text>
+        <Text style={styles.title}>Setores</Text>
         <View style={styles.formContext}>
           <View style={styles.listProf}>
             <FlatList
-              data={professores}
+              data={setores}
               renderItem={renderItem}
               keyExtractor={item => item.key}
-              //ItemSeparatorComponent={() => <View style={styles.separator} />}
+              ItemSeparatorComponent={() => <View style={styles.separator} />}
             />
           </View>
         </View>

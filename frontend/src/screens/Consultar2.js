@@ -25,7 +25,7 @@ export default function Adicionar() {
 
           <TouchableOpacity
             style={styles.buttonCadastrar}
-            onPress={() => navigation.navigate('CadastrarSetor')}>
+            onPress={() => navigation.navigate('ConsultarSetor')}>
             <Text style={styles.buttonText}>Setor</Text>
           </TouchableOpacity>
         </View>

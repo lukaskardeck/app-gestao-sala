@@ -21,7 +21,7 @@
     "@react-navigation/native-stack": "^6.9.26",
     "expo": "^50.0.14",
     "react": "18.2.0",
-    "react-native": "0.73.6",
+    "react-native": "0.73.7",
     "react-native-dropdown-select-list": "^2.0.5",
     "react-native-gesture-handler": "^2.15.0",
     "react-native-reanimated": "^3.8.1",
