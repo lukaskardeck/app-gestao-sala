@@ -19,57 +19,14 @@ export default function ConsultarProfessor() {
   };
 
   const [professores, setProfessores] = useState([]);
-  /*const [professores, setProfessores] = useState([
-    {
-      id: 1,
-      nome: 'Agnaldo',
-      email: 'agnaldo@uesb.edu.br',
-      telefone: '123456789',
-      setor: 'DCT',
-    },
-    {
-      id: 2,
-      nome: 'Saulo',
-      email: 'saulo@uesb.edu.br',
-      telefone: '123456789',
-      setor: 'DCT',
-    },
-    {
-      id: 3,
-      nome: 'Robson',
-      email: 'robson@uesb.edu.br',
-      telefone: '123456789',
-      setor: 'DCT',
-    },
-    {
-      id: 4,
-      nome: 'Lara',
-      email: 'lara@uesb.edu.br',
-      telefone: '123456789',
-      setor: 'DCHL',
-    },
-  ]);*/
 
   const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigateToDetails(item.value)}>
+    <TouchableOpacity onPress={() => navigateToDetails(item)}>
       <View style={styles.item}>
         <Text style={styles.text}>{item.value.nome}</Text>
       </View>
     </TouchableOpacity>
   );
-
-  /**
-   * return (
-    <View>
-      <FlatList
-        data={professores}
-        renderItem={renderItem}
-        keyExtractor={item => item.id}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
-    </View>
-  );
-   */
 
   useEffect(() => {
     const getProfessores = async () => {

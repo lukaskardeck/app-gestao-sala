@@ -51,7 +51,7 @@ export default function ConsultarSetor() {
   const [setores, setSetores] = useState([]);
 
   const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigateToDetails(item.value)}>
+    <TouchableOpacity onPress={() => navigateToDetails(item)}>
       <View style={styles.item}>
         <Text style={styles.text}>{item.value.sigla}</Text>
       </View>

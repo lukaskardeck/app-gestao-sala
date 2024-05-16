@@ -28,6 +28,13 @@ export default function Adicionar() {
             onPress={() => navigation.navigate('CadastrarSetor')}>
             <Text style={styles.buttonText}>Setor</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonCadastrar}
+            onPress={() => navigation.navigate('stacksEspaco')}
+          >
+            <Text style={styles.buttonText}>Espaço</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
