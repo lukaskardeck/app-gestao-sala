@@ -83,7 +83,7 @@ export default function DetalhesSetor({navigation, route}) {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>Setor</Text>
+        <Text style={styles.title}>{setor.value.sigla.toUpperCase()}</Text>
 
         <View style={styles.formContext}>
           <View style={styles.box}>

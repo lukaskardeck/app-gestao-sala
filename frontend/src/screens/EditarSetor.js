@@ -8,77 +8,171 @@ import {
   TouchableOpacity,
   Pressable,
   Keyboard,
+  Alert,
 } from 'react-native';
 
 //import { AntDesign } from '@expo/vector-icons';
-import MEditar from '../components/MEditar';
 import firestore from '@react-native-firebase/firestore';
 
 export default function EditarSetor({navigation, route}) {
-  const [modalVisible, setModalVisible] = useState(false);
   const setor = route.params.item;
+  const {
+    nome: nomeSetor,
+    email: emailSetor,
+    sigla: siglaSetor,
+    telefone: telSetor,
+  } = setor.value;
+
+  const [newNome, setNewNome] = useState(nomeSetor);
+  const [newEmail, setNewEmail] = useState(emailSetor);
+  const [newTelefone, setNewTelefone] = useState(telSetor);
+  const [newSigla, setNewSigla] = useState(siglaSetor);
+
+  async function EditarDadosSetor(nome, email, sigla, telefone) {
+    try {
+      // TRATANDO O CAMPO NOME
+      if (!nome) {
+        Alert.alert('Insira o nome');
+        return;
+      }
+      nome = nome.trim();
+
+      // TRATANDO A SIGLA DO SETOR
+      if (!sigla) {
+        Alert.alert('Selecione o setor');
+        return;
+      }
+      sigla = sigla.trim();
+
+      // TRATANDO CAMPO DE TELEFONE
+      if (!telefone) {
+        Alert.alert('Insira o telefone');
+        return;
+      }
+      telefone = telefone.trim();
+
+      // TRATANDO O EMAIL
+      if (!email) {
+        Alert.alert('Insira o email');
+        return;
+      }
+      email = email.trim();
+      if (!email.endsWith('@uesb.edu.br')) {
+        Alert.alert('Email inválido!\nInforme um email institucional.');
+        return;
+      }
+
+      // Verificar se o usuário já existe com o email fornecido
+      const snapshot = await firestore()
+        .collection('Usuario')
+        .where('email', '==', email)
+        .get();
+
+      let userEmail = snapshot.docs[0].data().email;
+
+      if (!snapshot.empty && email !== userEmail) {
+        Alert.alert(
+          'O email inserido já está cadastrado no banco',
+          'Informe um outro email.',
+        );
+        return;
+      }
+
+      /*setNewEmail('');
+      setNewNome('');
+      setNewTelefone('');
+      setSelectedSetor('');*/
+
+      firestore().collection('Usuario').doc(setor.key).update({
+        nome: nome,
+        email: email,
+        sigla: sigla,
+        telefone: telefone,
+      });
+
+      console.log('Dados do setor editado com sucesso');
+      Alert.alert('Dados do setor editado com sucesso');
+      navigation.goBack();
+    } catch (error) {
+      console.error('Erro ao editar os dados do setor:', error);
+    }
+  }
+
+  async function alertCancelar() {
+    Alert.alert('Cancelar', 'Deseja cancelar a edição?', [
+      {
+        text: 'Não',
+      },
+      {
+        text: 'Sim',
+        onPress: () => navigation.goBack(),
+      },
+    ]);
+  }
 
   return (
     <Pressable onPress={Keyboard.dismiss} style={styles.container}>
       <ImageBackground
         source={require('../assets/Fundo.png')}
         style={styles.imageBackground}>
-
-        <Text style={styles.title}>Setor</Text>
+        <Text style={styles.title}>Editar Setor</Text>
 
         <View style={styles.formContext}>
+          {/*CAMPO INPUT DE NOME*/}
           <View style={styles.box}>
             <Text style={styles.textForm}>Nome:</Text>
           </View>
-
           <TextInput
-            placeholder={setor.nome}
+            value={newNome}
+            onChangeText={setNewNome}
             keyboardType="ascii-capable"
             style={styles.input}
           />
 
+          {/*CAMPO INPUT DE EMAIL*/}
           <View style={styles.box}>
             <Text style={styles.textForm}>Email:</Text>
           </View>
-
           <TextInput
-            placeholder={setor.email}
+            value={newEmail}
+            onChangeText={setNewEmail}
             keyboardType="email-address"
             style={styles.input}
           />
 
+          {/*CAMPO INPUT DE NOME*/}
           <View style={styles.box}>
-            <Text style={styles.textForm}>Telefone:</Text>
+            <Text style={styles.textForm}>Sigla:</Text>
           </View>
-
           <TextInput
-            placeholder={setor.telefone}
-            keyboardType="numeric"
-            style={styles.input}
-          />
-
-          <View style={styles.box}>
-            <Text style={styles.textForm}>Departamento:</Text>
-          </View>
-
-          <TextInput
-            placeholder={setor.nomeSetor}
+            value={newSigla}
+            onChangeText={setNewSigla}
             keyboardType="ascii-capable"
             style={styles.input}
           />
 
+          {/*CAMPO INPUT DE TELEFONE*/}
+          <View style={styles.box}>
+            <Text style={styles.textForm}>Telefone:</Text>
+          </View>
+          <TextInput
+            value={newTelefone}
+            onChangeText={setNewTelefone}
+            keyboardType="numeric"
+            style={styles.input}
+          />
+
           <TouchableOpacity style={styles.buttonCadastrar}>
-            <Text
-              style={styles.buttonText}
-              onPress={() => setModalVisible(true)}>
+            <Text style={styles.buttonText} onPress={() => EditarDadosSetor(newNome, newEmail, newSigla, newTelefone)}>
               Editar
             </Text>
           </TouchableOpacity>
 
-          <MEditar
-            visible={modalVisible}
-            onClose={() => setModalVisible(false)}
-          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => alertCancelar()}>
+            <Text style={styles.buttonCancelar}>Cancelar</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </Pressable>

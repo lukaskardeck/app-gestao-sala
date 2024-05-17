@@ -83,7 +83,7 @@ export default function DetalhesProfessor({navigation, route}) {
           </TouchableOpacity>
         </View>
 
-        <Text style={styles.title}>Professor</Text>
+        <Text style={styles.title}>{professor.value.nome.toUpperCase()}</Text>
 
         <View style={styles.formContext}>
           <View style={styles.box}>
