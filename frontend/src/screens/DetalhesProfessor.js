@@ -60,7 +60,7 @@ export default function DetalhesProfessor({navigation, route}) {
         Alert.alert(`${professor.value.nome} deletado com sucesso!`, '', [
             {
               text: 'OK',
-              onPress: () => navigation.goBack(),
+              onPress: () => navigation.navigate('ConsultarProfessor'),
             },
           ]);
       }},

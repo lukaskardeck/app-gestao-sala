@@ -56,9 +56,11 @@ export default function ConsultarProfessor() {
 
           const setorData = setorSnapshot.data();
 
-          // Se o setor existe, adiciona o nome do setor aos dados do usuário
+          // Se o setor existe, adiciona o nome e sigla do setor aos dados do usuário
           if (setorData) {
             userData.nomeSetor = setorData.nome;
+            userData.siglaSetor = setorData.sigla;
+            userData.keySetor = userData.setor;
           }
         }
 
@@ -72,7 +74,7 @@ export default function ConsultarProfessor() {
       }
 
       setProfessores(professoresQuery);
-      console.log(professoresQuery);
+      //console.log(professoresQuery);
     };
 
     getProfessores();

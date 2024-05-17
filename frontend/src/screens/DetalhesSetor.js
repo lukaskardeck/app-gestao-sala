@@ -114,7 +114,7 @@ export default function DetalhesSetor({navigation, route}) {
             <TouchableOpacity
               style={styles.b}
               onPress={() =>
-                navigation.navigate('EditarProfessor', {item: setor})
+                navigation.navigate('EditarSetor', {item: setor})
               }>
               {/*<FontAwesome6 name="edit" size={20} color="white" />*/}
               <Text style={{color: 'white'}}>Edit</Text>
