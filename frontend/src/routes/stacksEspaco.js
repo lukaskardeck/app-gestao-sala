@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import CadastrarEspaco from "../screens/CadastrarEspaco";
+import CadastrarEsAcessibilidade from "../screens/CadastrarEsAcessibilidade";
 //import CadastrarEsAcessibilidade from "../screens/CadastrarEsAcessibilidade";
 //import CadastrarEsEquipamentos from "../screens/CadastrarEsEquipamentos";
 //import CadastrarEsEspecificacoes from "../screens/CadastrarEsEspecificacoes";
@@ -18,6 +19,11 @@ export default function StacksEspaco() {
             <Stack.Screen
                 name="CadastrarEspaco"
                 component={CadastrarEspaco}>
+            </Stack.Screen>
+
+            <Stack.Screen
+                name="Acessibilidade"
+                component={CadastrarEsAcessibilidade}>
             </Stack.Screen>
 
             {/*<Stack.Screen

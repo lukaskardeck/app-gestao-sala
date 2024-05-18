@@ -15,12 +15,14 @@ import CheckBox from '@react-native-community/checkbox';
 
 //import { AntDesign } from '@expo/vector-icons';
 
-export default function CadastrarEsAcessibilidade({navigation}) {
+export default function CadastrarEsAcessibilidade({navigation, route}) {
   const [errorMessage, setErrorMessage] = useState(null);
   const [nome, setNome] = useState('');
   const [email, setEmail] = useState('');
   const [telefone, setTelefone] = useState('');
   const [isChecked, setChecked] = useState(false);
+
+  const localizacao = route.params;
 
   /*function verification() {
     if (!nome.trim() || !email.trim() || !telefone.trim()) {
@@ -98,6 +100,7 @@ export default function CadastrarEsAcessibilidade({navigation}) {
               style={styles.buttonText}
               onPress={() => {
                 /*navigation.navigate('CadastrarEsEquipamentos')*/
+                console.log(localizacao);
               }}>
               Continuar
             </Text>
