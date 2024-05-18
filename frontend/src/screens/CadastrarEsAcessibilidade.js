@@ -1,26 +1,23 @@
-import React, {useState} from 'react';
-//import Checkbox from 'expo-checkbox';
+import React, {useState, useMemo} from 'react';
 import {
   StyleSheet,
   Text,
   View,
   ImageBackground,
   TouchableOpacity,
-  Vibration,
   Pressable,
   Keyboard,
+  ScrollView,
 } from 'react-native';
 
-import CheckBox from '@react-native-community/checkbox';
-
 //import { AntDesign } from '@expo/vector-icons';
+import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 export default function CadastrarEsAcessibilidade({navigation, route}) {
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [nome, setNome] = useState('');
-  const [email, setEmail] = useState('');
-  const [telefone, setTelefone] = useState('');
-  const [isChecked, setChecked] = useState(false);
+  const [checkRampa, setCheckRampa] = useState(false);
+  const [checkElevador, setCheckElevador] = useState(false);
+  const [checkCartCanhoto, setCheckCartCanhoto] = useState(false);
+  const [checkPisoTatil, setCheckPisoTatil] = useState(false);
 
   const localizacao = route.params;
 
@@ -43,64 +40,78 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
       <ImageBackground
         source={require('../assets/Fundo.png')}
         style={styles.imageBackground}>
-        <View style={styles.navbar}>
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            {/*<AntDesign name="bars" size={24} color="white" />*/}
-          </TouchableOpacity>
-        </View>
-
         <View>
           <Text style={styles.textTitle1}>Cadastrar Espaço</Text>
           <Text style={styles.textTitle2}>Acessibilidade</Text>
         </View>
 
         <View style={styles.formContext}>
-          <View style={styles.box}>
-            <Text style={styles.textForm}>Possui rampa?</Text>
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-          </View>
+          <View style={styles.checkboxList}>
+            <BouncyCheckbox
+              fillColor="blue"
+              text="Acesso via rampa"
+              innerIconStyle={{borderWidth: 2}}
+              textStyle={{
+                textDecorationLine: 'none',
+                fontSize: 20,
+                color: 'blue',
+              }}
+              onPress={isChecked => setCheckRampa(isChecked)}
+            />
 
-          <View style={styles.section}>
-            <CheckBox disabled={false} style={styles.checkbox} value={isChecked} onValueChange={setChecked} />
-            <Text style={styles.textCheckBox}>Sim</Text>
-          </View>
+            <BouncyCheckbox
+              fillColor="blue"
+              text="Acesso via elevador"
+              innerIconStyle={{borderWidth: 2}}
+              textStyle={{
+                textDecorationLine: 'none',
+                fontSize: 20,
+                color: 'blue',
+              }}
+              onPress={isChecked => setCheckElevador(isChecked)}
+            />
 
-          <View style={styles.section}>
-            {/*<Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />*/}
-            <Text style={styles.textCheckBox}>Não</Text>
-          </View>
+            <BouncyCheckbox
+              fillColor="blue"
+              text="Carteira para canhoto"
+              innerIconStyle={{borderWidth: 2}}
+              textStyle={{
+                textDecorationLine: 'none',
+                fontSize: 20,
+                color: 'blue',
+              }}
+              onPress={isChecked => setCheckCartCanhoto(isChecked)}
+            />
 
-          <View style={styles.section}>
-            {/*<Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />*/}
-            <Text style={styles.textCheckBox}>Não há necessidade</Text>
-          </View>
-
-          <View style={styles.box}>
-            <Text style={styles.textForm2}>Possui elevador?</Text>
-            <Text style={styles.errorMessage}>{errorMessage}</Text>
-          </View>
-
-          <View style={styles.section}>
-            {/*<Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />*/}
-            <Text style={styles.textCheckBox}>Sim</Text>
-          </View>
-
-          <View style={styles.section}>
-            {/*<Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />*/}
-            <Text style={styles.textCheckBox}>Não</Text>
-          </View>
-
-          <View style={styles.section}>
-            {/*<Checkbox style={styles.checkbox} value={isChecked} onValueChange={setChecked} />*/}
-            <Text style={styles.textCheckBox}>Não há necessidade</Text>
+            <BouncyCheckbox
+              fillColor="blue"
+              text="Piso tátil"
+              innerIconStyle={{borderWidth: 2}}
+              textStyle={{
+                textDecorationLine: 'none',
+                fontSize: 20,
+                color: 'blue',
+              }}
+              onPress={isChecked => setCheckPisoTatil(isChecked)}
+            />
           </View>
 
           <TouchableOpacity style={styles.buttonCadastrar}>
             <Text
               style={styles.buttonText}
               onPress={() => {
+                const infos = {
+                  ...localizacao,
+                  checkRampa,
+                  checkElevador,
+                  checkCartCanhoto,
+                  checkPisoTatil,
+                };
+
+                console.log(infos);
                 /*navigation.navigate('CadastrarEsEquipamentos')*/
-                console.log(localizacao);
+                //console.log(localizacao);
+                //console.log(checkRampa);
               }}>
               Continuar
             </Text>
@@ -151,9 +162,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     paddingTop: 20,
     width: '85%',
-    height: '53%',
     borderRadius: 30,
     marginBottom: 80,
+  },
+
+  checkboxList: {
+    paddingHorizontal: 20,
+    gap: 15,
   },
 
   textForm: {
