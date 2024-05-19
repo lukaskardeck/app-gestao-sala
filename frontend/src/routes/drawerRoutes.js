@@ -4,7 +4,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 //import {Feather} from '@expo/vector-icons';
 //import {AntDesign} from '@expo/vector-icons';
 
-import TabRoutes from './tabRoutes';
+//import TabRoutes from './tabRoutes';
 import HomeTab from './HomeTab';
 import Perfil from '../screens/Perfil';
 import Configuracoes from '../screens/Configuracoes';

@@ -19,7 +19,7 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
   const [checkCartCanhoto, setCheckCartCanhoto] = useState(false);
   const [checkPisoTatil, setCheckPisoTatil] = useState(false);
 
-  const localizacao = route.params;
+  const localizacao = route.params.localizacao;
 
   /*function verification() {
     if (!nome.trim() || !email.trim() || !telefone.trim()) {
@@ -100,16 +100,19 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
             <Text
               style={styles.buttonText}
               onPress={() => {
-                const infos = {
-                  ...localizacao,
+                const acessibilidades = {
                   checkRampa,
                   checkElevador,
                   checkCartCanhoto,
                   checkPisoTatil,
                 };
+                const infoWithAcess = {
+                  ...localizacao,
+                  acessibilidades,
+                };
 
-                console.log(infos);
-                /*navigation.navigate('CadastrarEsEquipamentos')*/
+                console.log(infoWithAcess);
+                navigation.navigate('Equipamento', {infoWithAcess});
                 //console.log(localizacao);
                 //console.log(checkRampa);
               }}>

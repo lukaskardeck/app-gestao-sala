@@ -1,56 +1,81 @@
-import {Button, FlatList, SafeAreaView, StyleSheet, Text, View} from 'react-native';
-import { useEffect, useState } from 'react';
+/* eslint-disable react/react-in-jsx-scope */
+import {
+  StyleSheet,
+  Text,
+  View,
+  ImageBackground,
+  TouchableOpacity,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function Consultar() {
-  const [totalUsuarios, setTotalUsuarios] = useState('Total de usuarios: ');
-  const [nome, setNome] = useState('Nome: ');
-  const [email, setEmail] = useState('Email: ');
-  const [usuarios, setUsuarios] = useState([]);
-
-  /*useEffect(() => {
-    const funcTeste = async () => {
-      try {
-        const querySnapshot = await firestore().collection('Usuario').get();
-        setUsuarios(querySnapshot.docs.map(user => ({...user.data(), id: user.id})));
-      } catch (error) {
-        console.log('Erro ao buscar usuários: ', error);
-      }
-    };
-  
-    funcTeste();
-  }, []);
-
-  const data = [
-    { key: '1', title: 'Item 1' },
-    { key: '2', title: 'Item 2' },
-    { key: '3', title: 'Item 3' },
-    // Adicione mais itens aqui
-  ];
-
-  const DataUsers = ({nome}) => (
-    <View>
-      <Text>{nome}</Text>
-    </View>
-  );*/
-
+  const navigation = useNavigation();
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Consultar</Text>
-      <Button title='Teste' onPress={() => {}}></Button>
-    </SafeAreaView>
+    <View style={styles.container}>
+      <ImageBackground
+        source={require('../assets/Fundo1.png')}
+        style={styles.imageBackground}>
+        <Text style={styles.title}>Consultar</Text>
+        <View style={styles.formContext}>
+          <TouchableOpacity
+            style={styles.buttonCadastrar}
+            onPress={() => navigation.navigate('ConsultarProfessor')}>
+            <Text style={styles.buttonText}>Professor</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonCadastrar}
+            onPress={() => navigation.navigate('ConsultarSetor')}>
+            <Text style={styles.buttonText}>Setor</Text>
+          </TouchableOpacity>
+        </View>
+      </ImageBackground>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+    height: 'auto',
   },
 
   title: {
-    fontSize: 22,
-    fontWeight: 'bold',
+    color: '#FFFFFF',
+    fontSize: 30,
+    textAlign: 'center',
+    paddingBottom: 30,
+  },
+
+  formContext: {
+    backgroundColor: '#FFFFFF',
+    width: '85%',
+    height: '70%',
+    borderRadius: 30,
+  },
+
+  imageBackground: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  buttonCadastrar: {
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '70%',
+    backgroundColor: '#211DFF',
+    paddingTop: 14,
+    paddingBottom: 14,
+    marginLeft: 50,
+    margin: 25,
+  },
+
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 20,
   },
 });

@@ -8,11 +8,11 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Espaco from '../screens/Espaco';
 import Manutencao from '../screens/Manutencao';
 import Gestor from '../screens/Gestor';
-import Consultar from '../screens/Consultar';
+//import Consultar from '../screens/Consultar';
 //import {AppStack} from './AppStack';
 //import AddStack from './AppStack';
 import Adicionar from '../screens/Adicionar';
-import Consultar2 from '../screens/Consultar2';
+import Consultar from '../screens/Consultar';
 
 const Tab = createBottomTabNavigator();
 
@@ -76,7 +76,7 @@ export default function HomeTab() {
 
       <Tab.Screen
         name="consultar"
-        component={Consultar2}
+        component={Consultar}
         options={{
           /*tabBarIcon: ({color, size}) => (
             <FontAwesome5 name="search" size={size} color={color} />
