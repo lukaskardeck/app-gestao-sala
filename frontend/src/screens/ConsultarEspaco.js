@@ -12,21 +12,6 @@ import firestore from '@react-native-firebase/firestore';
 import {SelectList} from 'react-native-dropdown-select-list';
 
 export default function ConsultarEspaco({navigation}) {
-  const navigateToDetails = item => {
-    navigation.navigate('DetalhesProfessor', {item});
-  };
-
-  const renderItem = ({item}) => (
-    <TouchableOpacity
-      onPress={() => {
-        //navigateToDetails(item)
-      }}>
-      <View style={styles.item}>
-        <Text style={styles.text}>{item.value.nome}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-
   const [modulosCompletos, setModulosCompletos] = useState({});
   const [modulos, setModulos] = useState([]);
   const [espacos, setEspacos] = useState([]);
@@ -57,10 +42,31 @@ export default function ConsultarEspaco({navigation}) {
       });
 
       setModulos(modulosArray);
+      //console.log(modulosObj);
+
+      const espacosSnapshot = await firestore().collection('Espaco').get();
+      const espacosList = espacosSnapshot.docs.map(doc => ({
+        key: doc.id,
+        value: doc.data(),
+      }));
+
+      espacosList.forEach(espaco => {
+        for (const [moduloId, modulo] of Object.entries(modulosObj)) {
+          if (modulo.espacos.includes(espaco.key)) {
+            espaco.value.modulo = {id: moduloId, nome: modulo.nome};
+            break;
+          }
+        }
+      });
+
+      setEspacos(espacosList);
+      setEspacoShow(espacosList);
+
+      console.log(espacosList);
     };
 
     // Buscar todos os espaços
-    const fetchEspacos = async () => {
+    /*const fetchEspacos = () => {
       const espacosSnapshot = await firestore().collection('Espaco').get();
       const espacosList = espacosSnapshot.docs.map(doc => ({
         key: doc.id,
@@ -68,23 +74,22 @@ export default function ConsultarEspaco({navigation}) {
       }));
       setEspacos(espacosList);
       setEspacoShow(espacosList);
-    };
 
-    /*const filtrarEspacosPorModulo = () => {
-      if (moduloSelecionado) {
-        const espacoIds = modulosCompletos[moduloSelecionado].espacos;
-        const espacosFiltrados = espacos.filter(espaco =>
-          espacoIds.includes(espaco.key),
-        );
-        setEspacoPorModulo(espacosFiltrados);
-      }
-    };
-*/
+      /*espacos.forEach(espaco => {
+        for (const [moduloId, modulo] of Object.entries(modulos)) {
+          if (modulo.espacos.includes(espaco.key)) {
+            espaco.value.modulo = {id: moduloId, nome: modulo.nome};
+            break;
+          }
+        }
+      });
+
+      //console.log(espacosList);
+    };*/
+
     fetchModulos();
-    fetchEspacos();
-    //filtrarEspacosPorModulo();
+    //fetchEspacos();
   }, []);
-  //moduloSelecionado, modulosCompletos, espacos
 
   const filtrarEspacosPorModulo = () => {
     if (moduloSelecionado) {
@@ -99,6 +104,18 @@ export default function ConsultarEspaco({navigation}) {
       }
     }
   };
+
+  const navigateToDetails = item => {
+    navigation.navigate('DetalhesEspaco', {item});
+  };
+
+  const renderItem = ({item}) => (
+    <TouchableOpacity onPress={() => navigateToDetails(item.value)}>
+      <View style={styles.item}>
+        <Text style={styles.text}>{item.value.nome}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
     <View style={styles.container}>
