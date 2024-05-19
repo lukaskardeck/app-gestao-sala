@@ -41,7 +41,6 @@ export default function ConsultarEspaco({navigation}) {
         obj[doc.id] = doc.data();
         return obj;
       }, {});
-
       // Armazene os dados completos
       setModulosCompletos(modulosObj);
 
@@ -51,11 +50,7 @@ export default function ConsultarEspaco({navigation}) {
         value: modulosObj[id].nome, // Supondo que "nomeModulo" é o campo a ser exibido no SelectList
       }));
 
-      modulosArray.splice(0, 0, {
-        key: 'all',
-        value: 'Todos os módulos',
-      });
-
+      
       setModulos(modulosArray);
     };
 
@@ -67,7 +62,6 @@ export default function ConsultarEspaco({navigation}) {
         value: doc.data(),
       }));
       setEspacos(espacosList);
-      setEspacoShow(espacosList);
     };
 
     /*const filtrarEspacosPorModulo = () => {
@@ -88,15 +82,11 @@ export default function ConsultarEspaco({navigation}) {
 
   const filtrarEspacosPorModulo = () => {
     if (moduloSelecionado) {
-      if (moduloSelecionado === 'all') {
-        setEspacoShow(espacos);
-      } else {
-        const espacoIds = modulosCompletos[moduloSelecionado].espacos;
-        const espacosFiltrados = espacos.filter(espaco =>
-          espacoIds.includes(espaco.key),
-        );
-        setEspacoShow(espacosFiltrados);
-      }
+      const espacoIds = modulosCompletos[moduloSelecionado].espacos;
+      const espacosFiltrados = espacos.filter(espaco =>
+        espacoIds.includes(espaco.key),
+      );
+      setEspacoShow(espacosFiltrados);
     }
   };
 
@@ -108,11 +98,9 @@ export default function ConsultarEspaco({navigation}) {
         <Text style={styles.title}>Espaços</Text>
         <View style={styles.formContext}>
           <View style={styles.inputSelect}>
-            {/*<Text style={styles.textModulo}>Selecione o módulo</Text>*/}
             <SelectList
               data={modulos}
               setSelected={setModuloSelecionado}
-              onSelect={filtrarEspacosPorModulo}
               placeholder="Filtre pelo módulo"
               dropdownStyles={{
                 zIndex: 2,
@@ -121,20 +109,41 @@ export default function ConsultarEspaco({navigation}) {
                 backgroundColor: 'white',
                 width: '100%',
               }}
-              maxHeight={250}
-              defaultOption={{
-                key: 'all',
-                value: 'Todos os módulos',
-              }}
+              maxHeight={150}
             />
           </View>
 
+          <View style={styles.buttonsFiltros}>
+            <TouchableOpacity style={styles.buttonCadastrar}>
+              <Text
+                style={styles.buttonText}
+                onPress={async () => filtrarEspacosPorModulo()}>
+                Aplicar
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.buttonCadastrar}>
+              <Text
+                style={styles.buttonText}
+                onPress={async () => setEspacoShow([])}>
+                Limpar
+              </Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.listProf}>
-            <FlatList
-              data={espacoShow}
-              renderItem={renderItem}
-              keyExtractor={item => item.key}
-            />
+            {espacoShow.length > 0 ? (
+              <FlatList
+                data={espacoShow}
+                renderItem={renderItem}
+                keyExtractor={item => item.key}
+              />
+            ) : (
+              <FlatList
+                data={espacos}
+                renderItem={renderItem}
+                keyExtractor={item => item.key}
+              />
+            )}
           </View>
         </View>
       </ImageBackground>
@@ -186,10 +195,13 @@ const styles = StyleSheet.create({
     color: '#0805A3',
   },
 
-  textModulo: {
-    fontSize: 20,
-    textAlign: 'left',
-    marginBottom: 5,
+  buttonCadastrar: {
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#211DFF',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
   },
 
   buttonText: {
@@ -199,6 +211,12 @@ const styles = StyleSheet.create({
 
   inputSelect: {
     paddingVertical: 10,
-    marginBottom: 10,
+  },
+
+  buttonsFiltros: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 5,
+    marginBottom: 20,
   },
 });

@@ -6,7 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
 } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 export default function Consultar() {
   const navigation = useNavigation();
@@ -27,6 +27,12 @@ export default function Consultar() {
             style={styles.buttonCadastrar}
             onPress={() => navigation.navigate('ConsultarSetor')}>
             <Text style={styles.buttonText}>Setor</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonCadastrar}
+            onPress={() => navigation.navigate('StackConsultarEspaco')}>
+            <Text style={styles.buttonText}>Espaço</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>

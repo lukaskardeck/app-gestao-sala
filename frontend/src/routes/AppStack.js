@@ -12,6 +12,7 @@ import DetalhesProfessor from '../screens/DetalhesProfessor';
 import EditarProfessor from '../screens/EditarProfessor';
 import EditarSetor from '../screens/EditarSetor';
 import StacksEspaco from './stacksEspaco';
+import StacksConsultarEspaco from './StacksConsultaEspaco';
 
 const Stack = createNativeStackNavigator();
 
@@ -27,7 +28,8 @@ export default function AppStack() {
       <Stack.Screen name="DetalhesProfessor" component={DetalhesProfessor} />
       <Stack.Screen name="EditarProfessor" component={EditarProfessor} />
       <Stack.Screen name="EditarSetor" component={EditarSetor} />
-      <Stack.Screen name="stacksEspaco" component={StacksEspaco}/>
+      <Stack.Screen name="stacksEspaco" component={StacksEspaco} />
+      <Stack.Screen name='StackConsultarEspaco' component={StacksConsultarEspaco}/>
     </Stack.Navigator>
   );
 }
