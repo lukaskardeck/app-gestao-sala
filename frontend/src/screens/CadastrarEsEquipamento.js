@@ -16,7 +16,7 @@ export default function CadastrarEsEquipamento({navigation, route}) {
   const [equipamentos, setEquipamentos] = useState([
     {id: 1, nome: 'Projetor', checked: false, quantidade: '1'},
     {id: 2, nome: 'Computador', checked: false, quantidade: '1'},
-    {id: 3, nome: 'Cadeira', checked: false, quantidade: '1'},
+    {id: 3, nome: 'Ar-condicionado', checked: false, quantidade: '1'},
   ]);
 
   const handleCheckboxChange = id => {

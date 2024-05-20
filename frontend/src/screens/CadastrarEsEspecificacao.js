@@ -119,7 +119,7 @@ export default function CadastrarEsEspecificacao({navigation, route}) {
                 await cadastrarEspacoEModulo(info);
                 //navigation.navigate('Acessibilidade');
               }}>
-              Continuar
+              Finalizar
             </Text>
           </TouchableOpacity>
         </View>

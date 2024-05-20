@@ -18,6 +18,14 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
   const [checkElevador, setCheckElevador] = useState(false);
   const [checkCartCanhoto, setCheckCartCanhoto] = useState(false);
   const [checkPisoTatil, setCheckPisoTatil] = useState(false);
+  const acessibilidades = [];
+
+  const textAcessibilidades = {
+    rampa: 'Acesso via rampa',
+    elevador: 'Acesso via elevador',
+    canhoto: 'Carteira para canhoto',
+    tatil: 'Piso tátil',
+  };
 
   const localizacao = route.params.localizacao;
 
@@ -49,7 +57,7 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
           <View style={styles.checkboxList}>
             <BouncyCheckbox
               fillColor="blue"
-              text="Acesso via rampa"
+              text={textAcessibilidades.rampa}
               innerIconStyle={{borderWidth: 2}}
               textStyle={{
                 textDecorationLine: 'none',
@@ -61,7 +69,7 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
 
             <BouncyCheckbox
               fillColor="blue"
-              text="Acesso via elevador"
+              text={textAcessibilidades.elevador}
               innerIconStyle={{borderWidth: 2}}
               textStyle={{
                 textDecorationLine: 'none',
@@ -73,7 +81,7 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
 
             <BouncyCheckbox
               fillColor="blue"
-              text="Carteira para canhoto"
+              text={textAcessibilidades.canhoto}
               innerIconStyle={{borderWidth: 2}}
               textStyle={{
                 textDecorationLine: 'none',
@@ -85,7 +93,7 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
 
             <BouncyCheckbox
               fillColor="blue"
-              text="Piso tátil"
+              text={textAcessibilidades.tatil}
               innerIconStyle={{borderWidth: 2}}
               textStyle={{
                 textDecorationLine: 'none',
@@ -100,12 +108,20 @@ export default function CadastrarEsAcessibilidade({navigation, route}) {
             <Text
               style={styles.buttonText}
               onPress={() => {
-                const acessibilidades = {
+                //let acessibilidades = [];
+
+                /*const acessibilidades = {
                   checkRampa,
                   checkElevador,
                   checkCartCanhoto,
                   checkPisoTatil,
-                };
+                };*/
+
+                if (checkRampa) acessibilidades.push(textAcessibilidades.rampa);
+                if (checkElevador) acessibilidades.push(textAcessibilidades.elevador);
+                if (checkCartCanhoto) acessibilidades.push(textAcessibilidades.canhoto);
+                if (checkPisoTatil) acessibilidades.push(textAcessibilidades.tatil);
+
                 const infoWithAcess = {
                   ...localizacao,
                   acessibilidades,
