@@ -53,7 +53,7 @@ export default function DetalhesEspaco({navigation, route}) {
             <TouchableOpacity
               style={styles.buttons}
               onPress={() =>
-                navigation.navigate('DetalhesEquipamento', {item: espaco})
+                navigation.navigate('DetalhesEquipamentos', {item: espaco})
               }>
               <Text style={styles.text}>Equipamentos</Text>
               {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
@@ -71,7 +71,7 @@ export default function DetalhesEspaco({navigation, route}) {
             <TouchableOpacity
               style={styles.buttons}
               onPress={() =>
-                navigation.navigate('DetalhesReservas', {item: espaco})
+                {}//navigation.navigate('DetalhesReservas', {item: espaco})
               }>
               <Text style={styles.text}>Reservas</Text>
               {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
@@ -80,7 +80,7 @@ export default function DetalhesEspaco({navigation, route}) {
             <TouchableOpacity
               style={styles.buttons2}
               onPress={() =>
-                navigation.navigate('DetalhesGestores', {item: espaco})
+                {}//navigation.navigate('DetalhesGestores', {item: espaco})
               }>
               <Text style={styles.text}>Gestores</Text>
               {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
