@@ -62,7 +62,7 @@ export default function ConsultarEspaco({navigation}) {
       setEspacos(espacosList);
       setEspacoShow(espacosList);
 
-      console.log(espacosList);
+      //console.log(espacosList[0].value.modulo);
     };
 
     // Buscar todos os espaços
