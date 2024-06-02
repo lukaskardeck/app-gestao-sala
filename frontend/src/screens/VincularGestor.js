@@ -242,12 +242,9 @@ export default function VincularGestor({navigation}) {
             <Text
               style={styles.buttonText}
               onPress={() => {
-                console.log(selectedCheckbox);
-                console.log(selectedModulo);
-                console.log(selectedEspaco);
                 if (selectedModulo && selectedEspaco) {
                     switch (selectedCheckbox) {
-                        case 'servico': navigation.navigate('VincularGestorServico');
+                        case 'servico': navigation.navigate('VincularGestorServico', {id_espaco: selectedEspaco});
                     }
                 } else {
                     Alert.alert('Selecione o módulo e o espaço!');
