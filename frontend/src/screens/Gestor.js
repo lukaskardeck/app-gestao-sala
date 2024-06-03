@@ -17,18 +17,17 @@ export default function Gestor() {
         style={styles.imageBackground}>
         <Text style={styles.title}>Gestor</Text>
         <View style={styles.formContext}>
-
           <TouchableOpacity
             style={styles.buttonCadastrar}
             onPress={() => navigation.navigate('StackVincularGestor')}>
             <Text style={styles.buttonText}>Vincular ao Espaço</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
+          {/*<TouchableOpacity
             style={styles.buttonCadastrar}
             onPress={() => navigation.navigate('')}>
             <Text style={styles.buttonText}>Consultar Gestores</Text>
-          </TouchableOpacity>
+  </TouchableOpacity>*/}
         </View>
       </ImageBackground>
     </View>

@@ -50,6 +50,12 @@ export default function VincularGestorServico({navigation, route}) {
         id_espaco: id_espaco,
       });
 
+      // 4. Atualizar o documento do espaço com o novo gestor de serviço
+      const espacoRef = firestore().collection('Espaco').doc(id_espaco);
+      await espacoRef.update({
+        gestor_servico: firestore.FieldValue.arrayUnion(email),
+      });
+
       Alert.alert('Sucesso', 'Vínculo de gestor de serviço foi feito com sucesso.');
     } catch (error) {
       console.error('Erro ao verificar e adicionar gestor:', error);

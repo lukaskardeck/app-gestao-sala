@@ -243,8 +243,14 @@ export default function VincularGestor({navigation}) {
               style={styles.buttonText}
               onPress={() => {
                 if (selectedModulo && selectedEspaco) {
-                    switch (selectedCheckbox) {
-                        case 'servico': navigation.navigate('VincularGestorServico', {id_espaco: selectedEspaco});
+                    if (selectedCheckbox === 'servico') {
+                      navigation.navigate('VincularGestorServico', {id_espaco: selectedEspaco});
+                    }
+                    else if (selectedCheckbox === 'reserva') {
+                      navigation.navigate('VincularGestorReserva', {id_espaco: selectedEspaco});
+                    }
+                    else {
+                      Alert.alert('Selecione o Tipo de Gestor');
                     }
                 } else {
                     Alert.alert('Selecione o módulo e o espaço!');
