@@ -76,9 +76,13 @@ export default function TipoSolicitReserva({navigation, route}) {
               style={styles.buttonText}
               onPress={() => {
                 if (selectedCheckbox === tipoSolicitReserva.DiaUnico) {
-                    navigation.navigate('ReservaDiaUnico', {id_espaco, email});
+                  navigation.navigate('ReservaDiaUnico', {
+                    id_espaco,
+                    email,
+                    tipoSolicitacao: tipoSolicitReserva.DiaUnico,
+                  });
                 } else {
-                    Alert.alert('Em manutenção...');
+                  Alert.alert('Em manutenção...');
                 }
               }}>
               Continuar

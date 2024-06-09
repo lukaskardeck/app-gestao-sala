@@ -17,7 +17,7 @@ import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import firestore from '@react-native-firebase/firestore';
 
 export default function ReservaDiaUnico({ navigation, route }) {
-  const { id_espaco, email } = route.params;
+  const { id_espaco, email, tipoSolicitacao } = route.params;
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [selectedIntervals, setSelectedIntervals] = useState([]);
@@ -148,6 +148,7 @@ export default function ReservaDiaUnico({ navigation, route }) {
               horarios: reservasPorGestor[gestorEmail],
               justificativa,
               gestorEmail,
+              tipoSolicitacao,
             };
             await firestore().collection('Solicitacao_Reserva').add(reservaData);
             console.log('Solicitação de reserva salva com sucesso:', reservaData);
