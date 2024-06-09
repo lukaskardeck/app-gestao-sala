@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
-import {MultipleSelectList} from 'react-native-dropdown-select-list';
+import { MultipleSelectList } from 'react-native-dropdown-select-list';
 import firestore from '@react-native-firebase/firestore';
 
-export default function ReservaDiaUnico({navigation, route}) {
-  const {id_espaco, email} = route.params;
+export default function ReservaDiaUnico({ navigation, route }) {
+  const { id_espaco, email } = route.params;
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [selectedIntervals, setSelectedIntervals] = useState([]);
@@ -27,17 +27,17 @@ export default function ReservaDiaUnico({navigation, route}) {
   const maxCaracteres = 200;
 
   const data = [
-    {key: '1', value: '07:30-08:20'},
-    {key: '2', value: '08:20-09:10'},
-    {key: '3', value: '09:10-10:00'},
-    {key: '4', value: '10:00-11:00'},
-    {key: '5', value: '11:00-11:50'},
-    {key: '6', value: '11:50-12:40'},
-    {key: '7', value: '14:00-14:50'},
-    {key: '8', value: '14:50-15:40'},
-    {key: '9', value: '15:40-16:30'},
-    {key: '10', value: '16:30-17:30'},
-    {key: '11', value: '17:30-18:20'},
+    { key: '1', value: '07:30-08:20' },
+    { key: '2', value: '08:20-09:10' },
+    { key: '3', value: '09:10-10:00' },
+    { key: '4', value: '10:00-11:00' },
+    { key: '5', value: '11:00-11:50' },
+    { key: '6', value: '11:50-12:40' },
+    { key: '7', value: '14:00-14:50' },
+    { key: '8', value: '14:50-15:40' },
+    { key: '9', value: '15:40-16:30' },
+    { key: '10', value: '16:30-17:30' },
+    { key: '11', value: '17:30-18:20' },
   ];
 
   const getDayOfWeek = date => {
@@ -48,7 +48,7 @@ export default function ReservaDiaUnico({navigation, route}) {
       'Quarta',
       'Quinta',
       'Sexta',
-      'Sabado',
+      'Sábado',
     ];
     return days[date.getDay()];
   };
@@ -62,8 +62,8 @@ export default function ReservaDiaUnico({navigation, route}) {
 
   const handleSubmit = async () => {
     if (!isDateSelected) {
-        Alert.alert('Erro', 'Por favor, selecione uma data.');
-        return; 
+      Alert.alert('Erro', 'Por favor, selecione uma data.');
+      return;
     }
 
     if (selectedIntervals.length === 0) {
@@ -72,20 +72,11 @@ export default function ReservaDiaUnico({navigation, route}) {
     }
 
     if (!justificativa) {
-        Alert.alert('Erro', 'Por favor, adicione uma justificativa');
-        return;
+      Alert.alert('Erro', 'Por favor, adicione uma justificativa');
+      return;
     }
 
-    const reservaData = {
-      email,
-      espacoID: id_espaco,
-      data: date.toISOString(),
-      horarios: selectedIntervals,
-      justificativa,
-    };
-
     const dayOfWeek = getDayOfWeek(date);
-    console.log(dayOfWeek);
 
     try {
       // Verificar disponibilidade do gestor de reserva
@@ -100,52 +91,90 @@ export default function ReservaDiaUnico({navigation, route}) {
         Alert.alert(
           'Erro',
           'Não há gestor de reserva disponível para este dia.',
+          [{ text: 'OK', onPress: () => {} }]
         );
         return;
       }
 
-      let gestorDisponivel = false;
+      const gestorDisponibilidade = {};
       gestorQuerySnapshot.forEach(doc => {
         const gestor = doc.data();
         const gestorHorarios = gestor.intervalos || [];
 
-        const horariosDisponiveis = selectedIntervals.some(interval =>
-          gestorHorarios.includes(interval),
-        );
-
-        if (horariosDisponiveis) {
-          gestorDisponivel = true;
-        }
+        gestorHorarios.forEach(horario => {
+          if (!gestorDisponibilidade[horario]) {
+            gestorDisponibilidade[horario] = {
+              email: gestor.email,
+              horarios: [],
+            };
+          }
+          gestorDisponibilidade[horario].horarios.push(horario);
+        });
       });
 
-      if (!gestorDisponivel) {
-        Alert.alert('Erro', 'Os horários selecionados não estão disponíveis.');
+      const horariosDisponiveis = selectedIntervals.filter(interval =>
+        Object.keys(gestorDisponibilidade).includes(interval)
+      );
+
+      if (horariosDisponiveis.length === 0) {
+        Alert.alert(
+          'Aviso',
+          'Não foi possível realizar a solicitação, pois nos horários solicitados não há gestor de reserva cadastrado.',
+          [{ text: 'OK', onPress: () => {} }]
+        );
         return;
       }
 
-      // Verificação de conflito
-      /*const conflictingQuery = await firestore()
-        .collection('Solicitacao_reserva')
-        .where('espacoID', '==', id_espaco)
-        .where('data', '==', reservaData.data)
-        .where('horarios', 'array-contains-any', selectedIntervals)
-        .get();
+      const horariosIndisponiveis = selectedIntervals.filter(
+        interval => !horariosDisponiveis.includes(interval)
+      );
 
-      if (!conflictingQuery.empty) {
-        Alert.alert('Erro', 'Conflito de reserva detectado. Por favor, escolha outro horário.');
-        return;
-      }*/
+      const proceedWithAvailableHorarios = async () => {
+        const reservasPorGestor = {};
+        horariosDisponiveis.forEach(horario => {
+          const gestorEmail = gestorDisponibilidade[horario].email;
+          if (!reservasPorGestor[gestorEmail]) {
+            reservasPorGestor[gestorEmail] = [];
+          }
+          reservasPorGestor[gestorEmail].push(horario);
+        });
 
-      // Salvando a solicitação de reserva
-      await firestore().collection('Solicitacao_Reserva').add(reservaData);
+        await Promise.all(
+          Object.keys(reservasPorGestor).map(async gestorEmail => {
+            const reservaData = {
+              solicitanteEmail: email,
+              espacoID: id_espaco,
+              data: date.toISOString(),
+              horarios: reservasPorGestor[gestorEmail],
+              justificativa,
+              gestorEmail,
+            };
+            await firestore().collection('Solicitacao_Reserva').add(reservaData);
+            console.log('Solicitação de reserva salva com sucesso:', reservaData);
+          })
+        );
 
-      console.log('Solicitação de reserva salva com sucesso:', reservaData);
-      Alert.alert('Solicitação de reserva salva com sucesso!');
-      navigation.navigate('SolicitarReserva');
-      navigation.goBack();
+        Alert.alert('Solicitação de reserva salva com sucesso!', '', [{ text: 'OK', onPress: () => {
+          navigation.navigate('SolicitarReserva');
+          navigation.goBack();
+        }}]);
+      };
+
+      if (horariosIndisponiveis.length > 0) {
+        Alert.alert(
+          'Aviso',
+          `Os horários ${horariosIndisponiveis.join(
+            ', '
+          )} não estão disponíveis. A solicitação será realizada apenas para os horários disponíveis.`,
+          [{ text: 'OK', onPress: proceedWithAvailableHorarios }]
+        );
+      } else {
+        await proceedWithAvailableHorarios();
+      }
+
     } catch (error) {
       console.error('Erro ao salvar a solicitação de reserva: ', error);
-      Alert.alert('Erro', 'Erro ao salvar a solicitação de reserva.');
+      Alert.alert('Erro', 'Erro ao salvar a solicitação de reserva.', [{ text: 'OK', onPress: () => {} }]);
     }
   };
 
@@ -153,7 +182,8 @@ export default function ReservaDiaUnico({navigation, route}) {
     <Pressable onPress={Keyboard.dismiss} style={styles.container}>
       <ImageBackground
         source={require('../assets/Fundo.png')}
-        style={styles.imageBackground}>
+        style={styles.imageBackground}
+      >
         <View>
           <Text style={styles.textTitle1}>Solicitar Reserva</Text>
         </View>
@@ -166,7 +196,8 @@ export default function ReservaDiaUnico({navigation, route}) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   marginBottom: 20,
-                }}>
+                }}
+              >
                 <Text style={styles.textForm}>{formattedDate}</Text>
                 <Button title="Date" onPress={() => setOpen(true)} />
               </View>
@@ -193,7 +224,7 @@ export default function ReservaDiaUnico({navigation, route}) {
                 <Text style={styles.textForm}>Selecione o(s) horários(s):</Text>
               </View>
 
-              <View style={{paddingHorizontal: 20, marginVertical: 10}}>
+              <View style={{ paddingHorizontal: 20, marginVertical: 10 }}>
                 <MultipleSelectList
                   setSelected={setSelectedIntervals}
                   data={data}
@@ -208,33 +239,29 @@ export default function ReservaDiaUnico({navigation, route}) {
             </View>
 
             <View>
-            <Text style={styles.textForm}>Justificativa:</Text>
-            <TextInput
-              placeholder="Ex.: Ministrar aula prática de Engenharia de Software I"
-              keyboardType="ascii-capable"
-              multiline={true}
-              style={styles.textArea}
-              value={justificativa}
-              onChangeText={setjustificativa}
-              maxLength={maxCaracteres}
-            />
-            <Text style={styles.textCountChar}>
-              {justificativa.length}/{maxCaracteres}
-            </Text>
-          </View>
+              <Text style={styles.textForm}>Justificativa:</Text>
+              <TextInput
+                placeholder="Ex.: Ministrar aula prática de Engenharia de Software I"
+                keyboardType="ascii-capable"
+                multiline={true}
+                style={styles.textArea}
+                value={justificativa}
+                onChangeText={setjustificativa}
+                maxLength={maxCaracteres}
+              />
+              <Text style={styles.textCountChar}>
+                {justificativa.length}/{maxCaracteres}
+              </Text>
+            </View>
           </View>
 
           <TouchableOpacity style={styles.buttonCadastrar}>
             <Text
               style={styles.buttonText}
               onPress={() => {
-                // console.log(id_espaco);
-                // console.log(email);
-                // console.log(isDateSelected);
-                // if (isDateSelected) console.log(date);
-                // console.log(selectedIntervals);
                 handleSubmit();
-              }}>
+              }}
+            >
               Finalizar
             </Text>
           </TouchableOpacity>
@@ -302,9 +329,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     backgroundColor: '#ECEBFD',
     height: 50,
-    //margin: 12,
     paddingLeft: 15,
-    //marginLeft: 16,
   },
 
   buttonCadastrar: {
@@ -384,11 +409,18 @@ const styles = StyleSheet.create({
   },
 
   textCountChar: {
-    //backgroundColor: 'gray',
     width: '90%',
     marginLeft: 16,
     textAlign: 'right',
     paddingEnd: 5,
     color: 'blue',
+  },
+
+  selectListBox: {
+    backgroundColor: '#ECEBFD',
+  },
+
+  selectListDropdown: {
+    backgroundColor: '#ECEBFD',
   },
 });
