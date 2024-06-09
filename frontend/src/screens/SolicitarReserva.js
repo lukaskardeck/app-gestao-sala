@@ -8,12 +8,14 @@ import {
   Pressable,
   Keyboard,
   Alert,
+  TextInput,
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 import {SelectList} from 'react-native-dropdown-select-list';
 
 export default function SolicitarReserva({navigation}) {
+  const [email, setEmail] = useState('');
   const [modulos, setModulos] = useState([]);
   const [selectedModulo, setSelectedModulo] = useState('');
   const [espacos, setEspacos] = useState([]);
@@ -99,20 +101,27 @@ export default function SolicitarReserva({navigation}) {
         </View>
 
         <View style={styles.formContext}>
-          <View
-            style={{
-              gap: 30,
-            }}>
-            <View
-              style={{
-                paddingHorizontal: 20,
-              }}>
+          <View style={{gap: 30}}>
+            <View style={{paddingHorizontal: 20}}>
               <View
                 style={{
                   alignItems: 'center',
                   paddingBottom: 20,
                 }}>
                 <Text style={styles.textForm}>Selecione o espaço</Text>
+              </View>
+
+              <View style={{marginBottom: 20}}>
+                <View style={styles.box}>
+                  <Text style={styles.textForm}>Email do solicitante:</Text>
+                </View>
+                <TextInput
+                  placeholder="Ex.: joao@uesb.edu.br"
+                  keyboardType="email-address"
+                  style={styles.input}
+                  onChangeText={setEmail}
+                  value={email}
+                />
               </View>
 
               <View style={styles.box}>
@@ -169,9 +178,10 @@ export default function SolicitarReserva({navigation}) {
                 if (selectedModulo && selectedEspaco) {
                   navigation.navigate('TipoSolicitReserva', {
                     id_espaco: selectedEspaco,
+                    email,
                   });
                 } else {
-                    Alert.alert('Selecione o módulo e o espaço!');
+                  Alert.alert('Selecione o módulo e o espaço!');
                 }
               }}>
               Continuar

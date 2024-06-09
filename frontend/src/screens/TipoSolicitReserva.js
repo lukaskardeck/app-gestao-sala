@@ -14,7 +14,7 @@ import {
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 export default function TipoSolicitReserva({navigation, route}) {
-  const id_espaco = route.params.id_espaco; // Pegando id_espaco da rota anterior
+  const {id_espaco, email} = route.params;
 
   const tipoSolicitReserva = {
     DiaUnico: 'Único Dia',
@@ -75,8 +75,7 @@ export default function TipoSolicitReserva({navigation, route}) {
             <Text
               style={styles.buttonText}
               onPress={() => {
-                console.log(id_espaco);
-                console.log(selectedCheckbox);
+                navigation.navigate('ReservaDiaUnico', {id_espaco, email});
               }}>
               Continuar
             </Text>
