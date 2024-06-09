@@ -75,7 +75,11 @@ export default function TipoSolicitReserva({navigation, route}) {
             <Text
               style={styles.buttonText}
               onPress={() => {
-                navigation.navigate('ReservaDiaUnico', {id_espaco, email});
+                if (selectedCheckbox === tipoSolicitReserva.DiaUnico) {
+                    navigation.navigate('ReservaDiaUnico', {id_espaco, email});
+                } else {
+                    Alert.alert('Em manutenção...');
+                }
               }}>
               Continuar
             </Text>

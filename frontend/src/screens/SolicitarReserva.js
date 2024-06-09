@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,14 +8,15 @@ import {
   Pressable,
   Keyboard,
   Alert,
-  TextInput,
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
 import {SelectList} from 'react-native-dropdown-select-list';
+import { AuthContext } from '../contexts/Auth';
 
 export default function SolicitarReserva({navigation}) {
-  const [email, setEmail] = useState('');
+  const { user } = useContext(AuthContext);
+  //const [email, setEmail] = useState('');
   const [modulos, setModulos] = useState([]);
   const [selectedModulo, setSelectedModulo] = useState('');
   const [espacos, setEspacos] = useState([]);
@@ -80,17 +81,6 @@ export default function SolicitarReserva({navigation}) {
     loadEspacos(selected);
   };
 
-  const tiposGestor = {
-    servico: 'Gestor de Serviço',
-    reserva: 'Gestor de Reserva',
-  };
-
-  const [selectedCheckbox, setSelectedCheckbox] = useState(null);
-
-  const handleCheckboxPress = checkbox => {
-    setSelectedCheckbox(checkbox === selectedCheckbox ? null : checkbox);
-  };
-
   return (
     <Pressable onPress={Keyboard.dismiss} style={styles.container}>
       <ImageBackground
@@ -103,25 +93,13 @@ export default function SolicitarReserva({navigation}) {
         <View style={styles.formContext}>
           <View style={{gap: 30}}>
             <View style={{paddingHorizontal: 20}}>
+
               <View
                 style={{
                   alignItems: 'center',
                   paddingBottom: 20,
                 }}>
                 <Text style={styles.textForm}>Selecione o espaço</Text>
-              </View>
-
-              <View style={{marginBottom: 20}}>
-                <View style={styles.box}>
-                  <Text style={styles.textForm}>Email do solicitante:</Text>
-                </View>
-                <TextInput
-                  placeholder="Ex.: joao@uesb.edu.br"
-                  keyboardType="email-address"
-                  style={styles.input}
-                  onChangeText={setEmail}
-                  value={email}
-                />
               </View>
 
               <View style={styles.box}>
@@ -178,11 +156,12 @@ export default function SolicitarReserva({navigation}) {
                 if (selectedModulo && selectedEspaco) {
                   navigation.navigate('TipoSolicitReserva', {
                     id_espaco: selectedEspaco,
-                    email,
+                    email: user.email,
                   });
                 } else {
                   Alert.alert('Selecione o módulo e o espaço!');
                 }
+                //console.log(user.email);
               }}>
               Continuar
             </Text>

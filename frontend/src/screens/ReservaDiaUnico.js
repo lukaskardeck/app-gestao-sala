@@ -9,6 +9,7 @@ import {
   Keyboard,
   Alert,
   Button,
+  TextInput,
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
@@ -18,7 +19,12 @@ import firestore from '@react-native-firebase/firestore';
 export default function ReservaDiaUnico({navigation, route}) {
   const {id_espaco, email} = route.params;
   const [date, setDate] = useState(new Date());
+  const [open, setOpen] = useState(false);
   const [selectedIntervals, setSelectedIntervals] = useState([]);
+  const [formattedDate, setFormattedDate] = useState('Selecione a data:');
+  const [isDateSelected, setIsDateSelected] = useState(false);
+  const [justificativa, setjustificativa] = useState('');
+  const maxCaracteres = 200;
 
   const data = [
     {key: '1', value: '07:30-08:20'},
@@ -47,10 +53,27 @@ export default function ReservaDiaUnico({navigation, route}) {
     return days[date.getDay()];
   };
 
+  const formatDate = date => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `Data selecionada: \n${day}/${month}/${year}`;
+  };
+
   const handleSubmit = async () => {
-    if (!email || selectedIntervals.length === 0) {
-      Alert.alert('Erro', 'Por favor, preencha todos os campos.');
+    if (!isDateSelected) {
+        Alert.alert('Erro', 'Por favor, selecione uma data.');
+        return; 
+    }
+
+    if (selectedIntervals.length === 0) {
+      Alert.alert('Erro', 'Por favor, selecione ao menos um horário.');
       return;
+    }
+
+    if (!justificativa) {
+        Alert.alert('Erro', 'Por favor, adicione uma justificativa');
+        return;
     }
 
     const reservaData = {
@@ -58,6 +81,7 @@ export default function ReservaDiaUnico({navigation, route}) {
       espacoID: id_espaco,
       data: date.toISOString(),
       horarios: selectedIntervals,
+      justificativa,
     };
 
     const dayOfWeek = getDayOfWeek(date);
@@ -117,6 +141,8 @@ export default function ReservaDiaUnico({navigation, route}) {
 
       console.log('Solicitação de reserva salva com sucesso:', reservaData);
       Alert.alert('Solicitação de reserva salva com sucesso!');
+      navigation.navigate('SolicitarReserva');
+      navigation.goBack();
     } catch (error) {
       console.error('Erro ao salvar a solicitação de reserva: ', error);
       Alert.alert('Erro', 'Erro ao salvar a solicitação de reserva.');
@@ -135,39 +161,81 @@ export default function ReservaDiaUnico({navigation, route}) {
         <View style={styles.formContext}>
           <View>
             <View>
-              <Text style={styles.textForm}>Selecione a data:</Text>
-              <DatePicker date={date} onDateChange={setDate} mode="date" />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginBottom: 20,
+                }}>
+                <Text style={styles.textForm}>{formattedDate}</Text>
+                <Button title="Date" onPress={() => setOpen(true)} />
+              </View>
+              <DatePicker
+                modal
+                mode="date"
+                minimumDate={new Date()}
+                open={open}
+                date={date}
+                onConfirm={selectedDate => {
+                  setOpen(false);
+                  setDate(selectedDate);
+                  setFormattedDate(formatDate(selectedDate));
+                  setIsDateSelected(true);
+                }}
+                onCancel={() => {
+                  setOpen(false);
+                }}
+              />
             </View>
 
             <View>
-              <Text style={styles.textForm}>Selecione o(s) horários(s):</Text>
+              <View>
+                <Text style={styles.textForm}>Selecione o(s) horários(s):</Text>
+              </View>
+
+              <View style={{paddingHorizontal: 20, marginVertical: 10}}>
+                <MultipleSelectList
+                  setSelected={setSelectedIntervals}
+                  data={data}
+                  save="value"
+                  placeholder="Selecione os horários"
+                  boxStyles={styles.selectListBox}
+                  dropdownStyles={styles.selectListDropdown}
+                  maxHeight={150}
+                  label="Horário(s) Selecionado(s)"
+                />
+              </View>
             </View>
 
-            <View style={{paddingHorizontal: 20}}>
-              <MultipleSelectList
-                setSelected={setSelectedIntervals}
-                data={data}
-                save="value"
-                placeholder="Selecione os horários"
-                boxStyles={styles.selectListBox}
-                dropdownStyles={styles.selectListDropdown}
-                maxHeight={150}
-                label="Horário(s) Selecionado(s)"
-              />
-            </View>
+            <View>
+            <Text style={styles.textForm}>Justificativa:</Text>
+            <TextInput
+              placeholder="Ex.: Ministrar aula prática de Engenharia de Software I"
+              keyboardType="ascii-capable"
+              multiline={true}
+              style={styles.textArea}
+              value={justificativa}
+              onChangeText={setjustificativa}
+              maxLength={maxCaracteres}
+            />
+            <Text style={styles.textCountChar}>
+              {justificativa.length}/{maxCaracteres}
+            </Text>
+          </View>
           </View>
 
           <TouchableOpacity style={styles.buttonCadastrar}>
             <Text
               style={styles.buttonText}
               onPress={() => {
-                console.log(id_espaco);
-                console.log(email);
-                console.log(date);
-                console.log(selectedIntervals);
+                // console.log(id_espaco);
+                // console.log(email);
+                // console.log(isDateSelected);
+                // if (isDateSelected) console.log(date);
+                // console.log(selectedIntervals);
                 handleSubmit();
               }}>
-              Continuar
+              Finalizar
             </Text>
           </TouchableOpacity>
         </View>
@@ -219,8 +287,6 @@ const styles = StyleSheet.create({
   textForm: {
     color: 'blue',
     fontSize: 22,
-    //backgroundColor: 'red',
-    marginBottom: 20,
     paddingHorizontal: 20,
   },
 
@@ -304,5 +370,25 @@ const styles = StyleSheet.create({
 
   tipoContainer: {
     marginBottom: 5,
+  },
+
+  textArea: {
+    height: 150,
+    width: '90%',
+    borderRadius: 5,
+    backgroundColor: '#ECEBFD',
+    padding: 10,
+    textAlignVertical: 'top',
+    marginLeft: 16,
+    marginTop: 10,
+  },
+
+  textCountChar: {
+    //backgroundColor: 'gray',
+    width: '90%',
+    marginLeft: 16,
+    textAlign: 'right',
+    paddingEnd: 5,
+    color: 'blue',
   },
 });
