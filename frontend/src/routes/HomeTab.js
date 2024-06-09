@@ -13,6 +13,7 @@ import Gestor from '../screens/Gestor';
 //import AddStack from './AppStack';
 import Adicionar from '../screens/Adicionar';
 import Consultar from '../screens/Consultar';
+import Reserva from '../screens/Reserva';
 
 const Tab = createBottomTabNavigator();
 
@@ -31,13 +32,24 @@ export default function HomeTab() {
         },
       }}>
       <Tab.Screen
-        name="espaco"
-        component={Espaco}
+        name="consultar"
+        component={Consultar}
+        options={{
+          /*tabBarIcon: ({color, size}) => (
+            <FontAwesome5 name="search" size={size} color={color} />
+          ),*/
+          tabBarLabel: 'Consultar',
+        }}
+      />
+
+      <Tab.Screen
+        name="reserva"
+        component={Reserva}
         options={{
           /*tabBarIcon: ({color, size}) => (
             <Entypo name="home" size={size} color={color} />
           ),*/
-          tabBarLabel: 'Espaço',
+          tabBarLabel: 'Reserva',
         }}
       />
 
@@ -71,17 +83,6 @@ export default function HomeTab() {
             <FontAwesome6 name="user-group" size={size} color={color} />
           ),*/
           tabBarLabel: 'Gestor',
-        }}
-      />
-
-      <Tab.Screen
-        name="consultar"
-        component={Consultar}
-        options={{
-          /*tabBarIcon: ({color, size}) => (
-            <FontAwesome5 name="search" size={size} color={color} />
-          ),*/
-          tabBarLabel: 'Consultar',
         }}
       />
     </Tab.Navigator>
