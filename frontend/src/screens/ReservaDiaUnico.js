@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -13,11 +13,11 @@ import {
 } from 'react-native';
 
 import DatePicker from 'react-native-date-picker';
-import { MultipleSelectList } from 'react-native-dropdown-select-list';
+import {MultipleSelectList} from 'react-native-dropdown-select-list';
 import firestore from '@react-native-firebase/firestore';
 
-export default function ReservaDiaUnico({ navigation, route }) {
-  const { id_espaco, email, tipoSolicitacao } = route.params;
+export default function ReservaDiaUnico({navigation, route}) {
+  const {id_espaco, email, tipoSolicitacao} = route.params;
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [selectedIntervals, setSelectedIntervals] = useState([]);
@@ -27,17 +27,17 @@ export default function ReservaDiaUnico({ navigation, route }) {
   const maxCaracteres = 200;
 
   const data = [
-    { key: '1', value: '07:30-08:20' },
-    { key: '2', value: '08:20-09:10' },
-    { key: '3', value: '09:10-10:00' },
-    { key: '4', value: '10:00-11:00' },
-    { key: '5', value: '11:00-11:50' },
-    { key: '6', value: '11:50-12:40' },
-    { key: '7', value: '14:00-14:50' },
-    { key: '8', value: '14:50-15:40' },
-    { key: '9', value: '15:40-16:30' },
-    { key: '10', value: '16:30-17:30' },
-    { key: '11', value: '17:30-18:20' },
+    {key: '1', value: '07:30-08:20'},
+    {key: '2', value: '08:20-09:10'},
+    {key: '3', value: '09:10-10:00'},
+    {key: '4', value: '10:00-11:00'},
+    {key: '5', value: '11:00-11:50'},
+    {key: '6', value: '11:50-12:40'},
+    {key: '7', value: '14:00-14:50'},
+    {key: '8', value: '14:50-15:40'},
+    {key: '9', value: '15:40-16:30'},
+    {key: '10', value: '16:30-17:30'},
+    {key: '11', value: '17:30-18:20'},
   ];
 
   const getDayOfWeek = date => {
@@ -91,7 +91,7 @@ export default function ReservaDiaUnico({ navigation, route }) {
         Alert.alert(
           'Erro',
           'Não há gestor de reserva disponível para este dia.',
-          [{ text: 'OK', onPress: () => {} }]
+          [{text: 'OK', onPress: () => {}}],
         );
         return;
       }
@@ -113,20 +113,20 @@ export default function ReservaDiaUnico({ navigation, route }) {
       });
 
       const horariosDisponiveis = selectedIntervals.filter(interval =>
-        Object.keys(gestorDisponibilidade).includes(interval)
+        Object.keys(gestorDisponibilidade).includes(interval),
       );
 
       if (horariosDisponiveis.length === 0) {
         Alert.alert(
           'Aviso',
           'Não foi possível realizar a solicitação, pois nos horários solicitados não há gestor de reserva cadastrado.',
-          [{ text: 'OK', onPress: () => {} }]
+          [{text: 'OK', onPress: () => {}}],
         );
         return;
       }
 
       const horariosIndisponiveis = selectedIntervals.filter(
-        interval => !horariosDisponiveis.includes(interval)
+        interval => !horariosDisponiveis.includes(interval),
       );
 
       const proceedWithAvailableHorarios = async () => {
@@ -150,32 +150,43 @@ export default function ReservaDiaUnico({ navigation, route }) {
               gestorEmail,
               tipoSolicitacao,
             };
-            await firestore().collection('Solicitacao_Reserva').add(reservaData);
-            console.log('Solicitação de reserva salva com sucesso:', reservaData);
-          })
+            await firestore()
+              .collection('Solicitacao_Reserva')
+              .add(reservaData);
+            console.log(
+              'Solicitação de reserva salva com sucesso:',
+              reservaData,
+            );
+          }),
         );
 
-        Alert.alert('Solicitação de reserva salva com sucesso!', '', [{ text: 'OK', onPress: () => {
-          navigation.navigate('SolicitarReserva');
-          navigation.goBack();
-        }}]);
+        Alert.alert('Solicitação de reserva salva com sucesso!', '', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.navigate('SolicitarReserva');
+              navigation.goBack();
+            },
+          },
+        ]);
       };
 
       if (horariosIndisponiveis.length > 0) {
         Alert.alert(
           'Aviso',
           `Os horários ${horariosIndisponiveis.join(
-            ', '
+            ', ',
           )} não estão disponíveis. A solicitação será realizada apenas para os horários disponíveis.`,
-          [{ text: 'OK', onPress: proceedWithAvailableHorarios }]
+          [{text: 'OK', onPress: proceedWithAvailableHorarios}],
         );
       } else {
         await proceedWithAvailableHorarios();
       }
-
     } catch (error) {
       console.error('Erro ao salvar a solicitação de reserva: ', error);
-      Alert.alert('Erro', 'Erro ao salvar a solicitação de reserva.', [{ text: 'OK', onPress: () => {} }]);
+      Alert.alert('Erro', 'Erro ao salvar a solicitação de reserva.', [
+        {text: 'OK', onPress: () => {}},
+      ]);
     }
   };
 
@@ -183,8 +194,7 @@ export default function ReservaDiaUnico({ navigation, route }) {
     <Pressable onPress={Keyboard.dismiss} style={styles.container}>
       <ImageBackground
         source={require('../assets/Fundo.png')}
-        style={styles.imageBackground}
-      >
+        style={styles.imageBackground}>
         <View>
           <Text style={styles.textTitle1}>Solicitar Reserva</Text>
         </View>
@@ -197,8 +207,7 @@ export default function ReservaDiaUnico({ navigation, route }) {
                   flexDirection: 'row',
                   alignItems: 'center',
                   marginBottom: 20,
-                }}
-              >
+                }}>
                 <Text style={styles.textForm}>{formattedDate}</Text>
                 <Button title="Date" onPress={() => setOpen(true)} />
               </View>
@@ -225,7 +234,7 @@ export default function ReservaDiaUnico({ navigation, route }) {
                 <Text style={styles.textForm}>Selecione o(s) horários(s):</Text>
               </View>
 
-              <View style={{ paddingHorizontal: 20, marginVertical: 10 }}>
+              <View style={{paddingHorizontal: 20, marginVertical: 10}}>
                 <MultipleSelectList
                   setSelected={setSelectedIntervals}
                   data={data}
@@ -261,8 +270,7 @@ export default function ReservaDiaUnico({ navigation, route }) {
               style={styles.buttonText}
               onPress={() => {
                 handleSubmit();
-              }}
-            >
+              }}>
               Finalizar
             </Text>
           </TouchableOpacity>

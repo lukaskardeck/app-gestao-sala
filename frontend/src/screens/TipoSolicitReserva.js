@@ -10,7 +10,6 @@ import {
   Alert,
 } from 'react-native';
 
-//import { AntDesign } from '@expo/vector-icons';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
 
 export default function TipoSolicitReserva({navigation, route}) {
@@ -19,7 +18,6 @@ export default function TipoSolicitReserva({navigation, route}) {
   const tipoSolicitReserva = {
     DiaUnico: 'Único Dia',
     Semanal: 'Semanal',
-    Quinzenal: 'Quinzenal',
   };
 
   const [selectedCheckbox, setSelectedCheckbox] = useState(null);
@@ -81,8 +79,14 @@ export default function TipoSolicitReserva({navigation, route}) {
                     email,
                     tipoSolicitacao: tipoSolicitReserva.DiaUnico,
                   });
+                } else if (selectedCheckbox === tipoSolicitReserva.Semanal) {
+                  navigation.navigate('ReservaSemanal', {
+                    id_espaco,
+                    email,
+                    tipoSolicitacao: tipoSolicitReserva.Semanal,
+                  });
                 } else {
-                  Alert.alert('Em manutenção...');
+                  Alert.alert('Selecione um tipo para continuar.');
                 }
               }}>
               Continuar
