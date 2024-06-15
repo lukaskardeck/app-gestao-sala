@@ -39,37 +39,45 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
   };
 
   const confirmaRejeitar = () => {
-    Alert.alert('Rejeitar Solicitação', 'Deseja rejeitar essa solicitação de reserva?', [
+    Alert.alert(
+      'Rejeitar Solicitação',
+      'Deseja rejeitar essa solicitação de reserva?',
+      [
         {
-            text: 'Cancelar',
-            onPress: () => {},
+          text: 'Cancelar',
+          onPress: () => {},
         },
         {
-            text: 'Ok',
-            onPress: () => {
-                Alert.alert('Solicitação rejeitada!');
-                navigation.goBack();
-                navigation.goBack();
-            },
+          text: 'Ok',
+          onPress: () => {
+            Alert.alert('Solicitação rejeitada!');
+            navigation.goBack();
+            navigation.goBack();
+          },
         },
-    ]);
+      ],
+    );
   };
 
   const confirmaHomologar = () => {
-    Alert.alert('Homologar Solicitação', 'Deseja homologar essa solicitação de reserva?', [
+    Alert.alert(
+      'Homologar Solicitação',
+      'Deseja homologar essa solicitação de reserva?',
+      [
         {
-            text: 'Cancelar',
-            onPress: () => {},
+          text: 'Cancelar',
+          onPress: () => {},
         },
         {
-            text: 'Ok',
-            onPress: () => {
-                Alert.alert('Solicitação homologada!');
-                navigation.goBack();
-                navigation.goBack();
-            },
+          text: 'Ok',
+          onPress: () => {
+            Alert.alert('Solicitação homologada!');
+            navigation.goBack();
+            navigation.goBack();
+          },
         },
-    ]);
+      ],
+    );
   };
 
   return (
@@ -102,6 +110,17 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
             <View style={styles.inputData}>{renderData()}</View>
 
             <View style={styles.box}>
+              <Text style={styles.textForm}>Horário(s):</Text>
+            </View>
+            <View style={styles.inputData}>
+              {solicitacao.value.horarios.map((horario, index) => (
+                <Text key={index} style={styles.horario}>
+                  {horario}
+                </Text>
+              ))}
+            </View>
+
+            <View style={styles.box}>
               <Text style={styles.textForm}>Justificativa:</Text>
             </View>
 
@@ -115,7 +134,9 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
             <Text style={{color: 'white', fontSize: 18}}>Rejeitar</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.b2} onPress={() => confirmaHomologar()}>
+          <TouchableOpacity
+            style={styles.b2}
+            onPress={() => confirmaHomologar()}>
             <Text style={{color: 'white', fontSize: 18}}>Homologar</Text>
           </TouchableOpacity>
         </View>
@@ -159,6 +180,16 @@ const styles = StyleSheet.create({
   data: {
     fontSize: 18,
     marginBottom: 5,
+  },
+
+  horario: {
+    fontSize: 18,
+    marginVertical: 5,
+  },
+
+  value: {
+    fontSize: 18,
+    marginBottom: 10,
   },
 
   textForm: {
