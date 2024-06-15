@@ -6,6 +6,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   FlatList,
+  RefreshControl
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {useState, useEffect, useContext} from 'react';
@@ -22,6 +23,7 @@ export default function GerirListaSolicitReserva() {
 
   const [solicitacoes, setSolicitacoes] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
 
   const renderItem = ({item}) => (
     <TouchableOpacity onPress={() => {
@@ -35,45 +37,53 @@ export default function GerirListaSolicitReserva() {
     </TouchableOpacity>
   );
 
+  const fetchSolicitacoes = async () => {
+    try {
+      // Buscar todas as solicitações de reserva
+      const solicitacoesSnapshot = await firestore().collection('Solicitacao_Reserva').where('gestorEmail', '==', user.email).get();
+
+      // Para cada solicitação, buscar os detalhes do espaço e módulo
+      const solicitacoesData = await Promise.all(solicitacoesSnapshot.docs.map(async (doc) => {
+        const solicitacao = doc.data();
+        const espacoID = solicitacao.espacoID;
+
+        // Buscar o espaço correspondente
+        const espacoDoc = await firestore().collection('Espaco').doc(espacoID).get();
+        const espacoData = espacoDoc.data();
+
+        // Buscar o módulo correspondente ao espaço
+        const moduloSnapshot = await firestore().collection('Modulo').where('espacos', 'array-contains', espacoID).get();
+        const moduloData = moduloSnapshot.docs.length > 0 ? moduloSnapshot.docs[0].data() : {};
+
+        return {
+          key: doc.id,
+          value: {
+            ...solicitacao,
+            nomeEspaco: espacoData ? espacoData.nome : 'Espaço Desconhecido',
+            nomeModulo: moduloData ? moduloData.nome : 'Módulo Desconhecido',
+          },
+        };
+      }));
+
+      setSolicitacoes(solicitacoesData);
+    } catch (error) {
+      console.error('Erro ao buscar solicitações de reserva: ', error);
+    } finally {
+      setCarregando(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchSolicitacoes = async () => {
-      try {
-        // Buscar todas as solicitações de reserva
-        const solicitacoesSnapshot = await firestore().collection('Solicitacao_Reserva').where('gestorEmail', '==', user.email).get();
-
-        // Para cada solicitação, buscar os detalhes do espaço e módulo
-        const solicitacoesData = await Promise.all(solicitacoesSnapshot.docs.map(async (doc) => {
-          const solicitacao = doc.data();
-          const espacoID = solicitacao.espacoID;
-
-          // Buscar o espaço correspondente
-          const espacoDoc = await firestore().collection('Espaco').doc(espacoID).get();
-          const espacoData = espacoDoc.data();
-
-          // Buscar o módulo correspondente ao espaço
-          const moduloSnapshot = await firestore().collection('Modulo').where('espacos', 'array-contains', espacoID).get();
-          const moduloData = moduloSnapshot.docs.length > 0 ? moduloSnapshot.docs[0].data() : {};
-
-          return {
-            key: doc.id,
-            value: {
-              ...solicitacao,
-              nomeEspaco: espacoData ? espacoData.nome : 'Espaço Desconhecido',
-              nomeModulo: moduloData ? moduloData.nome : 'Módulo Desconhecido',
-            },
-          };
-        }));
-
-        setSolicitacoes(solicitacoesData);
-      } catch (error) {
-        console.error('Erro ao buscar solicitações de reserva: ', error);
-      } finally {
-        setCarregando(false);
-      }
-    };
-
     fetchSolicitacoes();
-  }, [user.email]);
+  });
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchSolicitacoes();
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000); // Refresh indicator will be visible for at least 1 second
+  };
 
   return (
     <View style={styles.container}>
@@ -93,6 +103,9 @@ export default function GerirListaSolicitReserva() {
                 renderItem={renderItem}
                 keyExtractor={item => item.key}
                 ItemSeparatorComponent={() => <View style={styles.separator} />}
+                refreshControl={
+                  <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+                }
               />
             </View>
           ) : (

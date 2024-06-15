@@ -66,7 +66,6 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
             rejeitar();
             Alert.alert('Solicitação rejeitada!');
             navigation.goBack();
-            navigation.goBack();
           },
         },
       ],
