@@ -14,27 +14,40 @@ import {
 import firestore from '@react-native-firebase/firestore';
 
 export default function DetalheSolicitacaoReserva({navigation, route}) {
-  const solicitacao = route.params.item;
+  const solicitacaoKey = route.params.item.key;
+  const solicitacao = route.params.item.value;
 
   const renderData = () => {
-    if (solicitacao.value.tipoSolicitacao === 'Único Dia') {
+    if (solicitacao.tipoSolicitacao === 'Único Dia') {
       return (
         <View style={styles.dataContainer}>
           <Text style={styles.data}>
-            - {new Date(solicitacao.value.data).toLocaleDateString()}
+            - {new Date(solicitacao.data).toLocaleDateString()}
           </Text>
         </View>
       );
-    } else if (solicitacao.value.tipoSolicitacao === 'Semanal') {
+    } else if (solicitacao.tipoSolicitacao === 'Semanal') {
       return (
         <View style={styles.dataContainer}>
-          {solicitacao.value.data.map((dateString, index) => (
+          {solicitacao.data.map((dateString, index) => (
             <Text key={index} style={styles.data}>
               - {new Date(dateString).toLocaleDateString()}
             </Text>
           ))}
         </View>
       );
+    }
+  };
+
+  const rejeitar = async () => {
+    try {
+      await firestore()
+        .collection('Solicitacao_Reserva')
+        .doc(solicitacaoKey)
+        .delete();
+    } catch (error) {
+      console.error('Erro ao rejeitar solicitação: ', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao rejeitar a solicitação.');
     }
   };
 
@@ -50,6 +63,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
         {
           text: 'Ok',
           onPress: () => {
+            rejeitar();
             Alert.alert('Solicitação rejeitada!');
             navigation.goBack();
             navigation.goBack();
@@ -93,7 +107,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
               <Text style={styles.textForm}>Modulo e Espaco:</Text>
             </View>
             <Text style={styles.input}>
-              {solicitacao.value.nomeModulo} - {solicitacao.value.nomeEspaco}
+              {solicitacao.nomeModulo} - {solicitacao.nomeEspaco}
             </Text>
 
             <View style={styles.box}>
@@ -101,7 +115,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
             </View>
 
             <Text style={styles.input}>
-              {solicitacao.value.solicitanteEmail}
+              {solicitacao.solicitanteEmail}
             </Text>
 
             <View style={styles.box}>
@@ -113,7 +127,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
               <Text style={styles.textForm}>Horário(s):</Text>
             </View>
             <View style={styles.inputData}>
-              {solicitacao.value.horarios.map((horario, index) => (
+              {solicitacao.horarios.map((horario, index) => (
                 <Text key={index} style={styles.horario}>
                   {horario}
                 </Text>
@@ -125,7 +139,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
             </View>
 
             <Text style={styles.inputLarge}>
-              {solicitacao.value.justificativa}
+              {solicitacao.justificativa}
             </Text>
           </ScrollView>
         </View>
