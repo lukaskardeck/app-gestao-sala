@@ -6,8 +6,8 @@ export const AuthContext = createContext({});
 function AuthProvider({children}) {
   //const [user, setUser] = useState();
   const [user, setUser] = useState({
-    name: 'Departamento de Ciência e Tecnologia',
-    email: 'dct@uesb.edu.br',
+    name: 'Setor 02',
+    email: 'setor02@uesb.edu.br',
   });
 
   function SignIn(userGoogle) {

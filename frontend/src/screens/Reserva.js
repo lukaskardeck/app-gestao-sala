@@ -22,6 +22,12 @@ export default function Reserva() {
             onPress={() => navigation.navigate('StackSolicitarReserva')}>
             <Text style={styles.buttonText}>Solicitar Reserva</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonCadastrar}
+            onPress={() => navigation.navigate('StackGerirReserva')}>
+            <Text style={styles.buttonText}>Gerir Solicitações de Reserva</Text>
+          </TouchableOpacity>
         </View>
       </ImageBackground>
     </View>
@@ -71,5 +77,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#FFFFFF',
     fontSize: 20,
+    textAlign: 'center',
   },
 });

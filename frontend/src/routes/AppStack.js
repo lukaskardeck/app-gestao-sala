@@ -15,6 +15,7 @@ import StacksEspaco from './stacksEspaco';
 import StacksConsultarEspaco from './StacksConsultaEspaco';
 import StacksVincularGestor from './StackVincularGestor';
 import StacksSolicitarReserva from './StackSolicitarReserva';
+import StackGerirReserva from './StackGerirReserva';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function AppStack() {
       <Stack.Screen name='StackConsultarEspaco' component={StacksConsultarEspaco}/>
       <Stack.Screen name='StackVincularGestor' component={StacksVincularGestor} />
       <Stack.Screen name='StackSolicitarReserva' component={StacksSolicitarReserva} />
+      <Stack.Screen name='StackGerirReserva' component={StackGerirReserva} />
     </Stack.Navigator>
   );
 }
