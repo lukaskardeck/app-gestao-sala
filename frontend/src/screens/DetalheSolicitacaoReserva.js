@@ -9,6 +9,7 @@ import {
   Keyboard,
   ScrollView,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
 
 import firestore from '@react-native-firebase/firestore';
@@ -16,6 +17,8 @@ import firestore from '@react-native-firebase/firestore';
 export default function DetalheSolicitacaoReserva({navigation, route}) {
   const solicitacaoKey = route.params.item.key;
   const solicitacao = route.params.item.value;
+
+  const [carregando, setCarregando] = useState(false);
 
   const renderData = () => {
     if (solicitacao.tipoSolicitacao === 'Único Dia') {
@@ -72,6 +75,102 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
     );
   };
 
+  const verificarConflito = async (
+    espacoID,
+    tipoSolicitacao,
+    data,
+    horarios,
+  ) => {
+    try {
+      const espacoRef = firestore().collection('Espaco').doc(espacoID);
+      const reservasSnapshot = await espacoRef.collection('Reserva').get();
+
+      if (reservasSnapshot.empty) {
+        return false;
+      }
+
+      const reservasExistentes = reservasSnapshot.docs.map(doc => doc.data());
+
+      const dataSolicitacao = tipoSolicitacao === 'Único Dia' ? [data] : data;
+
+      for (const reserva of reservasExistentes) {
+        const dataReserva =
+          reserva.tipoReserva === 'Único Dia' ? [reserva.data] : reserva.data;
+
+        // Verifica se há datas em comum
+        const datasEmComum = dataSolicitacao.some(dataSolic =>
+          dataReserva.some(
+            dataRes =>
+              new Date(dataSolic).toDateString() ===
+              new Date(dataRes).toDateString(),
+          ),
+        );
+
+        if (datasEmComum) {
+          // Verifica se há horários em comum
+          const horariosEmComum = reserva.horarios.some(horarioRes =>
+            horarios.includes(horarioRes),
+          );
+
+          if (horariosEmComum) {
+            // Há conflito
+            return true;
+          }
+        }
+      }
+
+      // Não há conflito
+      return false;
+    } catch (error) {
+      console.error('Erro ao verificar conflito: ', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao verificar conflito.');
+      return true;
+    }
+  };
+
+  const homologar = async () => {
+    setCarregando(true);
+    try {
+      const conflito = await verificarConflito(
+        solicitacao.espacoID,
+        solicitacao.tipoSolicitacao,
+        solicitacao.data,
+        solicitacao.horarios,
+      );
+
+      if (conflito) {
+        return false;
+      }
+
+      const reservaData = {
+        tipoReserva: solicitacao.tipoSolicitacao,
+        justificativa: solicitacao.justificativa,
+        responsavel: solicitacao.solicitanteEmail,
+        horarios: solicitacao.horarios,
+        data: solicitacao.data,
+      };
+
+      await firestore()
+        .collection('Espaco')
+        .doc(solicitacao.espacoID)
+        .collection('Reserva')
+        .add(reservaData);
+
+      await firestore()
+        .collection('Solicitacao_Reserva')
+        .doc(solicitacaoKey)
+        .delete();
+
+      return true;
+    } catch (error) {
+      console.error('Erro ao homologar solicitação: ', error);
+      Alert.alert('Erro', 'Ocorreu um erro ao homologar a solicitação.');
+      return false;
+    } finally {
+      setCarregando(false);
+    }
+  };
+
   const confirmaHomologar = () => {
     Alert.alert(
       'Homologar Solicitação',
@@ -83,10 +182,14 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
         },
         {
           text: 'Ok',
-          onPress: () => {
-            Alert.alert('Solicitação homologada!');
-            navigation.goBack();
-            navigation.goBack();
+          onPress: async () => {
+            const confirm = await homologar();
+            if (confirm) {
+              Alert.alert('Solicitação homologada!');
+              navigation.goBack();
+            } else {
+              Alert.alert('Existe um conflito para essa reserva!');
+            }
           },
         },
       ],
@@ -101,6 +204,10 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
         <Text style={styles.title}>Detalhes</Text>
 
         <View style={styles.formContext}>
+        {carregando && <ActivityIndicator size="large" color="#0000ff" style={{
+            width: '100%',
+            height: '100%'
+          }}/>}
           <ScrollView>
             <View style={styles.box}>
               <Text style={styles.textForm}>Modulo e Espaco:</Text>
@@ -113,9 +220,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
               <Text style={styles.textForm}>Solicitante:</Text>
             </View>
 
-            <Text style={styles.input}>
-              {solicitacao.solicitanteEmail}
-            </Text>
+            <Text style={styles.input}>{solicitacao.solicitanteEmail}</Text>
 
             <View style={styles.box}>
               <Text style={styles.textForm}>Data(s):</Text>
@@ -137,9 +242,7 @@ export default function DetalheSolicitacaoReserva({navigation, route}) {
               <Text style={styles.textForm}>Justificativa:</Text>
             </View>
 
-            <Text style={styles.inputLarge}>
-              {solicitacao.justificativa}
-            </Text>
+            <Text style={styles.inputLarge}>{solicitacao.justificativa}</Text>
           </ScrollView>
         </View>
         <View style={styles.navbar2}>
