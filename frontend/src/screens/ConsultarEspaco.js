@@ -110,7 +110,7 @@ export default function ConsultarEspaco({navigation}) {
   };
 
   const renderItem = ({item}) => (
-    <TouchableOpacity onPress={() => navigateToDetails(item.value)}>
+    <TouchableOpacity onPress={() => navigateToDetails(item)}>
       <View style={styles.item}>
         <Text style={styles.text}>{item.value.nome}</Text>
       </View>

@@ -15,7 +15,8 @@ import {
 
 export default function DetalhesEspaco({navigation, route}) {
   //const [modalVisible, setModalVisible] = useState(false);
-  const espaco = route.params.item;
+  const espaco = route.params.item.value;
+  const espacoKey = route.params.item.key;
 
   return (
     <Pressable onPress={Keyboard.dismiss} style={styles.container}>
@@ -70,8 +71,11 @@ export default function DetalhesEspaco({navigation, route}) {
 
             <TouchableOpacity
               style={styles.buttons}
-              onPress={() =>
-                {}//navigation.navigate('DetalhesReservas', {item: espaco})
+              onPress={() => {
+                
+                navigation.navigate('ReservasDoEspaco', {item: {...espaco, espacoKey}})
+                console.log({...espaco, espacoKey});
+              }
               }>
               <Text style={styles.text}>Reservas</Text>
               {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
