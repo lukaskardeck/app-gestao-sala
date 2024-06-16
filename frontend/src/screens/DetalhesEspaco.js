@@ -84,7 +84,7 @@ export default function DetalhesEspaco({navigation, route}) {
             <TouchableOpacity
               style={styles.buttons2}
               onPress={() =>
-                {}//navigation.navigate('DetalhesGestores', {item: espaco})
+                navigation.navigate('VisualizarGestores', {item: espacoKey})
               }>
               <Text style={styles.text}>Gestores</Text>
               {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
