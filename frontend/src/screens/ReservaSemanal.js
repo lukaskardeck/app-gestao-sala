@@ -91,7 +91,7 @@ export default function ReservaSemanal({navigation, route}) {
     const result = [];
     let currentDate = new Date(startDate);
     currentDate.setDate(
-      currentDate.getDate() + (((dayOfWeek - 1) - currentDate.getDay() + 7) % 7),
+      currentDate.getDate() + (((dayOfWeek) - currentDate.getDay() + 7) % 7),
     );
 
     while (currentDate <= endDate) {
@@ -361,7 +361,7 @@ export default function ReservaSemanal({navigation, route}) {
                     placeholder="Horários"
                     boxStyles={styles.selectListBox}
                     dropdownStyles={styles.selectListDropdown}
-                    maxHeight={150}
+                    maxHeight={250}
                     label="Horário(s) Selecionado(s)"
                   />
                 </View>

@@ -84,7 +84,7 @@ export default function VisualizarGestores({navigation, route}) {
                 if (selectedCheckbox === 'servico') {
                   navigation.navigate('VisualizarGestorServico', {espacoKey});
                 } else if (selectedCheckbox === 'reserva') {
-                  navigation.navigate('VincularGestorReserva');
+                  navigation.navigate('VisualizarGestorReserva', {espacoKey});
                 } else {
                   Alert.alert('Selecione o Tipo de Gestor');
                 }

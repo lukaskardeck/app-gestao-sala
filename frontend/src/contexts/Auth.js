@@ -7,7 +7,7 @@ function AuthProvider({children}) {
   //const [user, setUser] = useState();
   const [user, setUser] = useState({
     name: 'Setor 02',
-    email: 'setor02@uesb.edu.br',
+    email: 'dct@uesb.edu.br',
   });
 
   function SignIn(userGoogle) {

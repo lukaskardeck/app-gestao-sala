@@ -7,6 +7,7 @@ import DetalhesEquipamentos from '../screens/DetalhesEquipamentos';
 import ReservasDoEspaco from '../screens/ReservasDoEspaco';
 import VisualizarGestores from '../screens/VisualizarGestoresEspaco';
 import VisualizarGestorServico from '../screens/VisualizarGestorServico';
+import VisualizarGestorReserva from '../screens/VisualizarGestorReserva';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +27,7 @@ export default function StacksConsultarEspaco() {
       <Stack.Screen name="ReservasDoEspaco" component={ReservasDoEspaco}/>
       <Stack.Screen name="VisualizarGestores" component={VisualizarGestores}/>
       <Stack.Screen name="VisualizarGestorServico" component={VisualizarGestorServico}/>
+      <Stack.Screen name="VisualizarGestorReserva" component={VisualizarGestorReserva}/>
 
     </Stack.Navigator>
   );
