@@ -1,11 +1,7 @@
-import React, {useContext} from 'react';
-import {AuthContext} from '../contexts/Auth';
+import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-//import {Feather} from '@expo/vector-icons';
-//import {AntDesign} from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
-//import TabRoutes from './tabRoutes';
-import HomeTab from './HomeTab';
 import Perfil from '../screens/Perfil';
 import Configuracoes from '../screens/Configuracoes';
 import AppStack from './AppStack';
@@ -13,7 +9,6 @@ import AppStack from './AppStack';
 const Drawer = createDrawerNavigator();
 
 export default function DrawerRoutes() {
-  const {SignOut} = useContext(AuthContext);
   return (
     <Drawer.Navigator
       screenOptions={{
@@ -24,9 +19,9 @@ export default function DrawerRoutes() {
         name="Home"
         component={AppStack}
         options={{
-          /*drawerIcon: ({color, size}) => (
-            <Feather name="home" size={size} color={color} />
-          ),*/
+          drawerIcon: ({color, size}) => (
+            <Icon name="home-outline" size={size} color={color} />
+          ),
           drawerLabel: 'Início',
         }}
       />
@@ -35,9 +30,9 @@ export default function DrawerRoutes() {
         name="Perfil"
         component={Perfil}
         options={{
-          /*drawerIcon: ({color, size}) => (
-            <Feather name="user" size={size} color={color} />
-          ),*/
+          drawerIcon: ({color, size}) => (
+            <Icon name="person-outline" size={size} color={color} />
+          ),
           drawerLabel: 'Meu Perfil',
         }}
       />
@@ -45,9 +40,9 @@ export default function DrawerRoutes() {
         name="Configuracoes"
         component={Configuracoes}
         options={{
-          /*drawerIcon: ({color, size}) => (
-            <AntDesign name="setting" size={size} color={color} />
-          ),*/
+          drawerIcon: ({color, size}) => (
+            <Icon name="settings-outline" size={size} color={color} />
+          ),
           drawerLabel: 'Configurações',
         }}
       />

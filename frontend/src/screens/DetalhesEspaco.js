@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   StyleSheet,
   Text,
@@ -8,13 +8,9 @@ import {
   Pressable,
   Keyboard,
 } from 'react-native';
-
-//import { AntDesign } from '@expo/vector-icons';
-//import { FontAwesome6 } from '@expo/vector-icons';
-//import MExcluir from "../components/MExcluir";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default function DetalhesEspaco({navigation, route}) {
-  //const [modalVisible, setModalVisible] = useState(false);
   const espaco = route.params.item.value;
   const espacoKey = route.params.item.key;
 
@@ -23,30 +19,35 @@ export default function DetalhesEspaco({navigation, route}) {
       <ImageBackground
         source={require('../assets/Fundo.png')}
         style={styles.imageBackground}>
-        <View style={styles.navbar}>
-          <TouchableOpacity
-            style={styles.goBack}
-            onPress={() => navigation.goBack()}>
-            {/*<AntDesign name="arrowleft" size={24} color="white" />*/}
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => navigation.openDrawer()}>
-            {/*<AntDesign name="bars" size={24} color="white" />*/}
-          </TouchableOpacity>
-        </View>
-
         <Text style={styles.title}>Espaço</Text>
 
         <View style={styles.formContext}>
-          <Text style={styles.nome}>{espaco.nome}</Text>
-          <Text style={styles.modulo}>{espaco.modulo.nome}</Text>
+          <View>
+            <View style={styles.titleContainer}>
+              <Ionicons name="home-outline" size={22} color="#0805A3" />
+              <Text style={styles.nome}>{espaco.nome}</Text>
+            </View>
+            <View style={styles.moduleContainer}>
+              <Ionicons name="layers-outline" size={22} color="#0805A3" />
+              <Text style={styles.modulo}>{espaco.modulo.nome}</Text>
+            </View>
+          </View>
 
           <View style={styles.navbar}>
+            <Ionicons
+              name="people-outline"
+              size={20}
+              color="#0805A3"
+              style={styles.icon}
+            />
             <Text style={styles.capacidade}>Capacidade:</Text>
             <Text style={styles.capacidade2}>{espaco.capacidade}</Text>
           </View>
 
-          <Text style={styles.descricao}>Descrição:</Text>
+          <View style={styles.descriptionContainer}>
+            <Ionicons name="document-text-outline" size={22} color="#0805A3" />
+            <Text style={styles.descricao}>Descrição:</Text>
+          </View>
 
           <Text style={styles.input}>{espaco.descricao}</Text>
 
@@ -57,7 +58,11 @@ export default function DetalhesEspaco({navigation, route}) {
                 navigation.navigate('DetalhesEquipamentos', {item: espaco})
               }>
               <Text style={styles.text}>Equipamentos</Text>
-              {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
+              <Ionicons
+                name="chevron-forward-outline"
+                size={20}
+                color="#211DFF"
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -66,19 +71,27 @@ export default function DetalhesEspaco({navigation, route}) {
                 navigation.navigate('DetalhesAcessibilidades', {item: espaco})
               }>
               <Text style={styles.text}>Acessibilidades</Text>
-              {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
+              <Ionicons
+                name="chevron-forward-outline"
+                size={20}
+                color="#211DFF"
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.buttons}
               onPress={() => {
-                
-                navigation.navigate('ReservasDoEspaco', {item: {...espaco, espacoKey}})
+                navigation.navigate('ReservasDoEspaco', {
+                  item: {...espaco, espacoKey},
+                });
                 console.log({...espaco, espacoKey});
-              }
-              }>
+              }}>
               <Text style={styles.text}>Reservas</Text>
-              {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
+              <Ionicons
+                name="chevron-forward-outline"
+                size={20}
+                color="#211DFF"
+              />
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -87,30 +100,13 @@ export default function DetalhesEspaco({navigation, route}) {
                 navigation.navigate('VisualizarGestores', {item: espacoKey})
               }>
               <Text style={styles.text}>Gestores</Text>
-              {/*<AntDesign name="caretright" size={20} color="#211DFF" />*/}
+              <Ionicons
+                name="chevron-forward-outline"
+                size={20}
+                color="#211DFF"
+              />
             </TouchableOpacity>
           </View>
-
-          {/*<View style={styles.navbar3}>
-            <TouchableOpacity
-              style={styles.b}
-              onPress={() =>
-                navigation.navigate('EditarEspaco', {item: espaco})
-              }>
-              <FontAwesome6 name="edit" size={20} color="white" />
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={styles.b2}
-              onPress={() => setModalVisible(true)}>
-              <AntDesign name="delete" size={20} color="white" />
-            </TouchableOpacity>
-
-            <MExcluir
-              visible={modalVisible}
-              onClose={() => setModalVisible(false)}
-            />
-          </View>*/}
         </View>
       </ImageBackground>
     </Pressable>
@@ -167,6 +163,8 @@ const styles = StyleSheet.create({
   navbar: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginLeft: 16,
+    marginBottom: 10,
   },
 
   b: {
@@ -197,22 +195,40 @@ const styles = StyleSheet.create({
     marginLeft: 200,
   },
 
-  nome: {
-    color: '#0805A3',
-    fontSize: 22,
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginLeft: 16,
   },
 
-  modulo: {
-    color: '#0805A3',
+  moduleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     marginLeft: 16,
     marginBottom: 30,
   },
 
+  descriptionContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginLeft: 16,
+    marginTop: 20,
+  },
+
+  nome: {
+    color: '#0805A3',
+    fontSize: 22,
+    marginLeft: 8,
+  },
+
+  modulo: {
+    color: '#0805A3',
+    marginLeft: 8,
+  },
+
   capacidade: {
     color: '#466EB6',
-    marginLeft: 16,
-    marginRight: 150,
+    marginRight: 5,
   },
 
   capacidade2: {
@@ -221,8 +237,11 @@ const styles = StyleSheet.create({
 
   descricao: {
     color: '#466EB6',
-    marginLeft: 16,
-    marginTop: 20,
+    marginLeft: 8,
+  },
+
+  icon: {
+    marginRight: 5,
   },
 
   buttons: {
