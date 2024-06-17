@@ -4,9 +4,9 @@ import {Alert} from 'react-native';
 export const AuthContext = createContext({});
 
 function AuthProvider({children}) {
-  //const [user, setUser] = useState();
+  // [user, setUser] = useState();
   const [user, setUser] = useState({
-    name: 'Setor 02',
+    name: 'DCT',
     email: 'dct@uesb.edu.br',
   });
 

@@ -58,18 +58,19 @@ function TelaLogin() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, //around
+    flex: 1,
   },
 
   imgBG: {
     flex: 1,
     alignItems: 'center',
     flexDirection: 'column',
-    justifyContent: 'flex-end',
+    justifyContent: 'center',
+    paddingTop: 60,
   },
 
   boxTitle: {
-    marginBottom: 40,
+    marginBottom: 10,
   },
 
   title: {

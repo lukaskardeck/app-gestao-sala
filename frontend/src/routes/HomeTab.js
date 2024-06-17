@@ -1,16 +1,10 @@
 /* eslint-disable react/react-in-jsx-scope */
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-//import {AntDesign} from '@expo/vector-icons';
-//import {Entypo} from '@expo/vector-icons';
-//import {FontAwesome5} from '@expo/vector-icons';
-//import {FontAwesome6} from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import Espaco from '../screens/Espaco';
 import Manutencao from '../screens/Manutencao';
 import Gestor from '../screens/Gestor';
-//import Consultar from '../screens/Consultar';
-//import {AppStack} from './AppStack';
-//import AddStack from './AppStack';
 import Adicionar from '../screens/Adicionar';
 import Consultar from '../screens/Consultar';
 import Reserva from '../screens/Reserva';
@@ -35,9 +29,9 @@ export default function HomeTab() {
         name="consultar"
         component={Consultar}
         options={{
-          /*tabBarIcon: ({color, size}) => (
-            <FontAwesome5 name="search" size={size} color={color} />
-          ),*/
+          tabBarIcon: ({color, size}) => (
+            <Icon name="search-outline" size={size} color={color} />
+          ),
           tabBarLabel: 'Consultar',
         }}
       />
@@ -46,9 +40,9 @@ export default function HomeTab() {
         name="reserva"
         component={Reserva}
         options={{
-          /*tabBarIcon: ({color, size}) => (
-            <Entypo name="home" size={size} color={color} />
-          ),*/
+          tabBarIcon: ({color, size}) => (
+            <Icon name="home-outline" size={size} color={color} />
+          ),
           tabBarLabel: 'Reserva',
         }}
       />
@@ -57,9 +51,9 @@ export default function HomeTab() {
         name="manutencao"
         component={Manutencao}
         options={{
-          /*tabBarIcon: ({color, size}) => (
-            <FontAwesome5 name="wrench" size={size} color={color} />
-          ),*/
+          tabBarIcon: ({color, size}) => (
+            <Icon name="construct-outline" size={size} color={color} />
+          ),
           tabBarLabel: 'Manutenção',
         }}
       />
@@ -68,9 +62,9 @@ export default function HomeTab() {
         name="adicionar"
         component={Adicionar}
         options={{
-          /*tabBarIcon: ({color, size}) => (
-            <AntDesign name="pluscircle" size={size} color={color} />
-          ),*/
+          tabBarIcon: ({color, size}) => (
+            <Icon name="add-circle-outline" size={size} color={color} />
+          ),
           tabBarLabel: 'Adicionar',
         }}
       />
@@ -79,9 +73,9 @@ export default function HomeTab() {
         name="gestor"
         component={Gestor}
         options={{
-          /*tabBarIcon: ({color, size}) => (
-            <FontAwesome6 name="user-group" size={size} color={color} />
-          ),*/
+          tabBarIcon: ({color, size}) => (
+            <Icon name="people-outline" size={size} color={color} />
+          ),
           tabBarLabel: 'Gestor',
         }}
       />
