@@ -6,7 +6,7 @@ export const AuthContext = createContext({});
 function AuthProvider({children}) {
   // [user, setUser] = useState();
   const [user, setUser] = useState({
-    name: 'DCT',
+    name: 'Departamento de Ciência e Tecnologia',
     email: 'dct@uesb.edu.br',
   });
 
